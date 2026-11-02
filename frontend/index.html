@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Vedant J. Sharma · Electrical Engineering Student</title>
+    <meta
+      name="description"
+      content="Vedant J. Sharma, third-year B.E. Electrical Engineering student at SSGMCE Shegaon. Projects, skills, education and contact."
+    />
+    <meta name="theme-color" content="#0c0c10" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Vedant J. Sharma · Electrical Engineering Student" />
+    <meta
+      property="og:description"
+      content="B.E. 3rd Year · Open to internships. Projects, skills, education and contact."
+    />
+    <meta property="og:image" content="assets/img/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="assets/fonts/display.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/img/portrait.webp" as="image" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/theme-boot.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="brand" href="#top" aria-label="Vedant J. Sharma, back to top">
+          <span class="brand-mark">VS</span><span class="brand-name">Vedant Sharma</span>
+        </a>
+        <nav class="links" aria-label="Sections">
+          <a href="#doors" data-k="doors">About</a>
+          <a href="#projects" data-k="projects">Projects</a>
+          <a href="#journey" data-k="journey">Journey</a>
+          <a href="#contact" data-k="contact">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button
+            class="theme-switch"
+            id="themeSwitch"
+            type="button"
+            aria-label="Switch to light theme"
+            aria-pressed="false"
+          >
+            <span class="ts-knob" aria-hidden="true">
+              <svg class="i-sun" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4.2" />
+                <path
+                  d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"
+                />
+              </svg>
+              <svg class="i-moon" viewBox="0 0 24 24">
+                <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
+              </svg>
+            </span>
+          </button>
+          <a
+            class="btn btn-sm btn-accent nav-cv"
+            href="assets/docs/Vedant_Sharma_CV.pdf"
+            data-cv
+            target="_blank"
+            rel="noopener"
+            >CV
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14" /></svg
+          ></a>
+          <button
+            class="menu-btn"
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="sheet"
+          >
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+      <div class="sheet" id="sheet" hidden>
+        <a href="#doors">About</a><a href="#projects">Projects</a><a href="#journey">Journey</a
+        ><a href="#contact">Contact</a>
+      </div>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" data-sec="hero">
+        <div class="hero-grid wrap">
+          <div class="hero-copy">
+            <p class="eyebrow reveal">
+              <span class="dot" aria-hidden="true"></span
+              ><span id="tagline">B.E. 3rd Year · Open to internships</span>
+            </p>
+            <h1 class="hero-title">
+              <span class="line reveal">Hi, I'm <span class="hl">Vedant.</span></span>
+              <span class="line reveal">I am a</span>
+              <span class="line reveal"
+                ><span class="pill-wrap"
+                  ><span class="pill" id="rolePill"
+                    ><span class="pill-txt" id="roleTxt">future Electrical Engineer</span></span
+                  ></span
+                ></span
+              >
+            </h1>
+            <p class="hero-sub reveal">
+              Third-year B.E. Electrical Engineering student at SSGMCE, Shegaon. Into electrical machines,
+              automation and saving power.
+            </p>
+            <div class="hero-cta reveal">
+              <a
+                class="btn btn-accent magnetic"
+                href="assets/docs/Vedant_Sharma_CV.pdf"
+                data-cv
+                target="_blank"
+                rel="noopener"
+                >Download CV
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14" /></svg
+              ></a>
+              <a class="btn btn-ghost magnetic" href="#contact"
+                >Say hello
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" /></svg
+              ></a>
+            </div>
+            <dl class="stats reveal" id="stats"></dl>
+          </div>
+          <div class="hero-art" aria-hidden="false">
+            <div class="art-disc" aria-hidden="true"></div>
+            <div class="art-ring" aria-hidden="true"></div>
+            <img
+              class="portrait"
+              id="portrait"
+              src="assets/img/portrait.webp"
+              width="720"
+              height="960"
+              alt="Portrait of Vedant J. Sharma"
+              fetchpriority="high"
+            />
+            <div class="chip chip-a" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg
+              ><span>Electrical Engg.</span>
+            </div>
+            <div class="chip chip-b" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" />
+                <circle cx="12" cy="9.5" r="2.4" /></svg
+              ><span id="locChip">Maharashtra, India</span>
+            </div>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#doors" aria-label="Scroll to the next section"><span></span></a>
+      </section>
+
+      <div class="marquee" data-sec="marquee" aria-hidden="true">
+        <div class="marquee-track" id="marquee"></div>
+      </div>
+
+      <section class="sec doors-sec" id="doors" data-sec="doors" aria-labelledby="doorsTitle">
+        <div class="wrap">
+          <p class="kicker reveal">01 · About</p>
+          <h2 class="h2 reveal" id="doorsTitle">Magic happens <em>behind the doors.</em></h2>
+          <p class="lead reveal">Pick a door. Each one opens into a part of my story.</p>
+          <div class="doors" id="doorsRow"></div>
+        </div>
+      </section>
+
+      <section class="sec" id="projects" data-sec="projects" aria-labelledby="projTitle">
+        <div class="wrap">
+          <p class="kicker reveal">02 · Projects</p>
+          <h2 class="h2 reveal" id="projTitle">Things I've <em>built.</em></h2>
+          <p class="lead reveal">
+            Two academic projects, both about doing more with less power. Tap the phones to see the idea in
+            action.
+          </p>
+          <div id="projectList"></div>
+        </div>
+      </section>
+
+      <section class="sec" id="journey" data-sec="journey" aria-labelledby="journeyTitle">
+        <div class="wrap">
+          <p class="kicker reveal">03 · Journey</p>
+          <h2 class="h2 reveal" id="journeyTitle">Let's go <em>back in time.</em></h2>
+          <p class="lead reveal">From the lecture hall today back to where it started.</p>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </section>
+
+      <section class="sec contact" id="contact" data-sec="contact" aria-labelledby="contactTitle">
+        <div class="wrap">
+          <div class="cta-card reveal">
+            <p class="kicker">04 · Contact</p>
+            <h2 class="cta-title" id="contactTitle">
+              Got an opening?<br /><span>Let's build it together.</span>
+            </h2>
+            <div class="cta-row">
+              <div class="toggle-pill" role="group" aria-label="How to reach me">
+                <button type="button" class="tp-opt is-on" data-mode="email" aria-pressed="true">
+                  Email
+                </button>
+                <button type="button" class="tp-opt" data-mode="call" aria-pressed="false">Call</button>
+                <span class="tp-knob" aria-hidden="true"></span>
+              </div>
+              <a class="btn btn-accent btn-lg magnetic" id="ctaBtn" href="mailto:vedantsharma8830@gmail.com"
+                ><span id="ctaLabel">vedantsharma8830@gmail.com</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7m0 0H8m9 0v9" /></svg
+              ></a>
+            </div>
+            <button type="button" class="copy" id="copyBtn">Copy email</button>
+
+            <!-- Contact form: posts to /api/contact when the backend is running,
+             otherwise it opens the visitor's email app with the message filled in. -->
+            <form class="cform" id="contactForm" novalidate>
+              <p class="cform-lead">Or drop a message here and I'll get back to you.</p>
+              <div class="cform-grid">
+                <label class="field">
+                  <span>Your name</span>
+                  <input type="text" name="name" id="cfName" autocomplete="name" maxlength="80" required />
+                  <small class="field-err" data-err="name"></small>
+                </label>
+                <label class="field">
+                  <span>Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    id="cfEmail"
+                    autocomplete="email"
+                    inputmode="email"
+                    maxlength="120"
+                    required
+                  />
+                  <small class="field-err" data-err="email"></small>
+                </label>
+                <label class="field field-full">
+                  <span>Message</span>
+                  <textarea name="message" id="cfMessage" rows="4" maxlength="2000" required></textarea>
+                  <small class="field-err" data-err="message"></small>
+                </label>
+                <!-- Honeypot: hidden from people, bots tend to fill it in -->
+                <div class="hp" aria-hidden="true">
+                  <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+                </div>
+              </div>
+              <div class="cform-foot">
+                <button type="submit" class="btn btn-accent" id="cfSubmit">
+                  <span id="cfSubmitLabel">Send message</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" /></svg>
+                </button>
+                <p class="cform-status" id="cfStatus" role="status" aria-live="polite"></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot" data-sec="footer">
+      <div class="wrap foot-grid">
+        <div>
+          <a class="brand" href="#top"
+            ><span class="brand-mark">VS</span><span class="brand-name">Vedant J. Sharma</span></a
+          >
+          <p class="foot-note">Electrical Engineering Student · Maharashtra, India</p>
+        </div>
+        <div class="foot-col">
+          <h3>Explore</h3>
+          <a href="#doors">About</a><a href="#projects">Projects</a><a href="#journey">Journey</a
+          ><a href="#contact">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h3>Reach me</h3>
+          <a id="footMail" href="mailto:vedantsharma8830@gmail.com">vedantsharma8830@gmail.com</a>
+          <a id="footTel" href="tel:+918830588405">+91 88305 88405</a>
+          <a href="assets/docs/Vedant_Sharma_CV.pdf" data-cv target="_blank" rel="noopener"
+            >Download CV (PDF)</a
+          >
+        </div>
+      </div>
+      <div class="wrap foot-base">
+        <span>© <span id="year">2026</span> Vedant J. Sharma</span>
+        <a href="#top" class="totop">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="roomTitle" hidden>
+      <div class="room-in">
+        <button class="room-close" id="roomClose" type="button" aria-label="Close and go back">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+        <div class="room-body" id="roomBody"></div>
+      </div>
+    </div>
+
+    <button
+      class="fab"
+      id="fab"
+      type="button"
+      aria-label="Customise"
+      aria-controls="panel"
+      aria-expanded="false"
+      hidden
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+        <circle cx="16" cy="7" r="2" />
+        <circle cx="10" cy="17" r="2" />
+      </svg>
+    </button>
+    <aside class="panel" id="panel" aria-label="Customise" hidden>
+      <div class="panel-head">
+        <strong>Customise</strong
+        ><button type="button" class="panel-x" id="panelX" aria-label="Close">×</button>
+      </div>
+      <div class="panel-sec">
+        <span class="plabel">Theme</span>
+        <div class="seg" data-pref="theme">
+          <button type="button" data-v="dark">Dark</button><button type="button" data-v="light">Light</button
+          ><button type="button" data-v="auto">Auto</button>
+        </div>
+      </div>
+      <div class="panel-sec">
+        <span class="plabel">Accent</span>
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div class="panel-sec">
+        <span class="plabel">Font</span>
+        <div class="seg" data-pref="font">
+          <button type="button" data-v="grotesk">Bold</button
+          ><button type="button" data-v="clean">Clean</button
+          ><button type="button" data-v="serif">Classic</button
+          ><button type="button" data-v="mono">Tech</button>
+        </div>
+      </div>
+      <div class="panel-sec">
+        <span class="plabel">Animations</span>
+        <div class="seg" data-pref="motion">
+          <button type="button" data-v="true">On</button><button type="button" data-v="false">Off</button>
+        </div>
+      </div>
+      <div class="panel-sec">
+        <span class="plabel">Sections</span>
+        <div class="checks" id="secChecks"></div>
+      </div>
+      <div class="panel-foot">
+        <button type="button" class="btn btn-sm btn-ghost" id="resetPrefs">Reset</button
+        ><button type="button" class="btn btn-sm btn-ghost" id="lockPrefs">Lock</button>
+      </div>
+      <p class="saved" id="savedNote">Saved on this device</p>
+    </aside>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/contact.js"></script>
+  </body>
+</html>
