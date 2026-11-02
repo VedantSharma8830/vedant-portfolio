@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# environment / secrets
+.env
+.env.local
+
+# runtime data (contact messages, visit counter)
+backend/data/*.json
+backend/data/*.tmp
+
+# logs and OS files
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db

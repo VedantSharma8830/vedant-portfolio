@@ -1,0 +1,54 @@
+{
+  "name": "vedant-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website of Vedant J. Sharma, Electrical Engineering student. Frontend plus a Node.js/Express backend with a contact form API and admin inbox.",
+  "author": "Vedant J. Sharma",
+  "license": "MIT",
+  "private": true,
+  "main": "backend/server.js",
+  "scripts": {
+    "prestart": "node scripts/ensure-env.js",
+    "start": "node backend/server.js",
+    "predev": "node scripts/ensure-env.js",
+    "dev": "nodemon",
+    "test": "node --test backend/tests/api.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "nodemonConfig": {
+    "exec": "node backend/server.js",
+    "watch": [
+      "backend",
+      "frontend/js/data.js",
+      ".env"
+    ],
+    "ignore": [
+      "backend/data/*",
+      "backend/tests/*"
+    ],
+    "ext": "js,json,html"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "portfolio",
+    "express",
+    "nodejs",
+    "electrical-engineering"
+  ],
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.10"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1"
+  }
+}
