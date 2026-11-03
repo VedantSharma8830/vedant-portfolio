@@ -539,7 +539,7 @@ svg circle {
 .hero-art {
   position: relative;
   justify-self: center;
-  width: min(440px, 100%);
+  width: min(280px, 100%);
   aspect-ratio: 3/4;
 }
 .art-disc {
@@ -2325,8 +2325,22 @@ svg circle {
   }
   .hero-art {
     order: -1;
-    width: min(250px, 64%);
+    width: min(148px, 42%);
     margin-bottom: 4px;
+  }
+  .hero-art .chip {
+    padding: 7px 11px;
+    font-size: 12px;
+  }
+  .hero-art .chip-a {
+    left: auto;
+    right: 80%;
+    top: 24%;
+  }
+  .hero-art .chip-b {
+    right: auto;
+    left: 80%;
+    bottom: 20%;
   }
   .scroll-cue {
     display: none;
