@@ -17,10 +17,40 @@
     />
     <meta property="og:image" content="assets/img/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="author" content="Vedant J. Sharma" />
     <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/display.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="assets/img/portrait.webp" as="image" />
+    <link
+      rel="preload"
+      href="assets/img/portrait.webp"
+      as="image"
+      imagesrcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
+      imagesizes="(max-width: 760px) 70vw, 440px"
+    />
     <link rel="stylesheet" href="css/style.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Vedant J. Sharma",
+        "jobTitle": "Electrical Engineering Student",
+        "email": "mailto:vedantsharma8830@gmail.com",
+        "telephone": "+91 88305 88405",
+        "address": { "@type": "PostalAddress", "addressRegion": "Maharashtra", "addressCountry": "IN" },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Shri Sant Gajanan Maharaj College of Engineering, Shegaon"
+        },
+        "knowsAbout": [
+          "Electrical machines",
+          "Control systems",
+          "Transformers",
+          "Automation",
+          "Energy efficiency"
+        ]
+      }
+    </script>
+
     <script src="js/theme-boot.js"></script>
   </head>
   <body>
@@ -28,7 +58,7 @@
 
     <header class="nav" id="nav">
       <div class="nav-in">
-        <a class="brand" href="#top" aria-label="Vedant J. Sharma, back to top">
+        <a class="brand" href="#top" title="Back to top">
           <span class="brand-mark">VS</span><span class="brand-name">Vedant Sharma</span>
         </a>
         <nav class="links" aria-label="Sections">
@@ -134,6 +164,8 @@
               class="portrait"
               id="portrait"
               src="assets/img/portrait.webp"
+              srcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
+              sizes="(max-width: 760px) 70vw, 440px"
               width="720"
               height="960"
               alt="Portrait of Vedant J. Sharma"
@@ -280,6 +312,9 @@
       </div>
       <div class="wrap foot-base">
         <span>© <span id="year">2026</span> Vedant J. Sharma</span>
+        <span class="api-badge" id="apiBadge" hidden
+          ><i aria-hidden="true"></i> Backend online · <b id="visitCount">0</b> visits</span
+        >
         <a href="#top" class="totop">Back to top ↑</a>
       </div>
     </footer>

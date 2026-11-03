@@ -79,5 +79,19 @@
     },
   };
 
-  window.Api.countVisit();
+  // Footer badge: shows that the backend is live and how many visits it has counted
+  function showStatus(visits) {
+    var badge = document.getElementById("apiBadge");
+    var count = document.getElementById("visitCount");
+    if (!badge || !count || typeof visits !== "number") return;
+    count.textContent = visits.toLocaleString("en-IN");
+    badge.hidden = false;
+  }
+
+  window.Api.countVisit().then(function (r) {
+    if (r && r.ok) return showStatus(r.data.visits);
+    return request("/api/stats", {}, 4000).then(function (s) {
+      if (s && s.ok) showStatus(s.data.visits);
+    });
+  });
 })();
