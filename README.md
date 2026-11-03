@@ -243,7 +243,7 @@ The backend reads the same file for `GET /api/profile`, so there is only one pla
 Refresh the browser to see the change (with `npm run dev` the server picks it up automatically).
 
 To replace the CV, put the new PDF in `frontend/assets/docs/` with the same name
-(or update `cvFile` in `data.js`). To change the photo, replace `frontend/assets/img/portrait.webp`.
+(or update `cvFile` in `data.js`). To change the photo, replace `frontend/assets/img/avatar.webp` and `avatar-360.webp` (square, head and shoulders).
 
 ---
 

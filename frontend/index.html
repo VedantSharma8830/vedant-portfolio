@@ -22,10 +22,10 @@
     <link rel="preload" href="assets/fonts/display.woff2" as="font" type="font/woff2" crossorigin />
     <link
       rel="preload"
-      href="assets/img/portrait.webp"
+      href="assets/img/avatar.webp"
       as="image"
-      imagesrcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
-      imagesizes="(max-width: 960px) 148px, 280px"
+      imagesrcset="assets/img/avatar-360.webp 360w, assets/img/avatar.webp 540w"
+      imagesizes="(max-width: 960px) 180px, 330px"
     />
     <link rel="stylesheet" href="css/style.css" />
     <script type="application/ld+json">
@@ -158,19 +158,21 @@
             <dl class="stats reveal" id="stats"></dl>
           </div>
           <div class="hero-art" aria-hidden="false">
-            <div class="art-disc" aria-hidden="true"></div>
             <div class="art-ring" aria-hidden="true"></div>
-            <img
-              class="portrait"
-              id="portrait"
-              src="assets/img/portrait.webp"
-              srcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
-              sizes="(max-width: 960px) 148px, 280px"
-              width="720"
-              height="960"
-              alt="Portrait of Vedant J. Sharma"
-              fetchpriority="high"
-            />
+            <div class="avatar">
+              <div class="art-disc" aria-hidden="true"></div>
+              <img
+                class="portrait"
+                id="portrait"
+                src="assets/img/avatar.webp"
+                srcset="assets/img/avatar-360.webp 360w, assets/img/avatar.webp 540w"
+                sizes="(max-width: 960px) 180px, 330px"
+                width="540"
+                height="540"
+                alt="Portrait of Vedant J. Sharma"
+                fetchpriority="high"
+              />
+            </div>
             <div class="chip chip-a" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg
               ><span>Electrical Engg.</span>

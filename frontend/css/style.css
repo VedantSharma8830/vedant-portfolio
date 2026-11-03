@@ -539,15 +539,23 @@ svg circle {
 .hero-art {
   position: relative;
   justify-self: center;
-  width: min(280px, 100%);
-  aspect-ratio: 3/4;
+  width: min(330px, 100%);
+  aspect-ratio: 1;
+}
+.avatar {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  border: 3px solid var(--accent);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent),
+    0 0 46px color-mix(in srgb, var(--accent) 42%, transparent);
 }
 .art-disc {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 4%;
-  aspect-ratio: 1;
+  inset: 0;
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 30%,
@@ -555,14 +563,11 @@ svg circle {
     var(--accent) 45%,
     color-mix(in srgb, var(--accent) 60%, #000)
   );
-  transition: transform 0.8s var(--ease);
+  transform: none !important;
 }
 .art-ring {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4%;
-  aspect-ratio: 1;
+  inset: -7%;
   border-radius: 50%;
   border: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
   animation: spin 40s linear infinite;
@@ -574,12 +579,11 @@ svg circle {
 }
 .portrait {
   position: absolute;
-  inset: auto 0 0 0;
+  inset: 0;
   width: 100%;
-  height: auto;
-  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
-  transition: transform 0.9s var(--ease);
+  height: 100%;
+  object-fit: cover;
+  transform: none !important;
 }
 .chip {
   position: absolute;
@@ -605,12 +609,12 @@ svg circle {
   color: #b8860b;
 }
 .chip-a {
-  left: -6%;
-  top: 30%;
+  left: -20%;
+  top: 4%;
 }
 .chip-b {
-  right: -4%;
-  bottom: 22%;
+  right: -16%;
+  bottom: 6%;
   animation-delay: -3s;
 }
 @keyframes float {
@@ -2325,8 +2329,8 @@ svg circle {
   }
   .hero-art {
     order: -1;
-    width: min(148px, 42%);
-    margin-bottom: 4px;
+    width: min(180px, 48%);
+    margin: 14px 0 18px;
   }
   .hero-art .chip {
     padding: 7px 11px;
@@ -2334,13 +2338,13 @@ svg circle {
   }
   .hero-art .chip-a {
     left: auto;
-    right: 80%;
-    top: 24%;
+    right: 74%;
+    top: 6%;
   }
   .hero-art .chip-b {
     right: auto;
-    left: 80%;
-    bottom: 20%;
+    left: 74%;
+    bottom: 6%;
   }
   .scroll-cue {
     display: none;

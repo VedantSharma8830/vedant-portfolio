@@ -14,7 +14,7 @@ window.CV = {
   phoneHref: "tel:+918830588405",
   email: "vedantsharma8830@gmail.com",
   cvFile: "assets/docs/Vedant_Sharma_CV.pdf",
-  photo: "assets/img/portrait.webp",
+  photo: "assets/img/avatar.webp",
 
   roles: ["future Electrical Engineer", "automation enthusiast", "problem solver", "hands-on learner"],
 
