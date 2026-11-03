@@ -382,7 +382,8 @@
     var room = $("#room"),
       roomBody = $("#roomBody"),
       roomIn = $(".room-in", room),
-      roomClose = $("#roomClose");
+      roomClose = $("#roomClose"),
+      roomScene = $("#roomScene");
     var opener = null,
       busy = false;
     function clipFrom(door) {
@@ -405,6 +406,13 @@
         return k === n ? "" : '<button type="button" data-go="' + k + '">' + esc(o.name) + " →</button>";
       }).join("");
       roomBody.innerHTML = r.build() + '<div class="room-next">' + others + "</div>";
+      var RM = window.__vsRoom;
+      if (RM) {
+        roomScene.innerHTML = RM.scene(r.id);
+        RM.decorate(roomBody);
+        if (!roomScene._glow) RM.glow(room);
+        roomScene._glow = 1;
+      }
       roomIn.scrollTop = 0;
     }
     function openRoom(n, door) {
@@ -1028,6 +1036,7 @@
           if (!b) return;
           var v = b.getAttribute("data-v");
           prefs[k] = v === "true" ? true : v === "false" ? false : v;
+          if (k === "intro") prefs.introPick = true;
           apply();
           save();
         });

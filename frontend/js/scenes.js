@@ -1,14 +1,12 @@
 /*
  * "Step Inside": four doors that swing open onto small animated worlds
  * (a whale in the deep, a rocket lifting off, waves with jumping fish and a
- * lion in the jungle). The same little worlds also sit behind the four doors
- * in the About section. Pure SVG + CSS animation; each scene only animates
+ * lion in the jungle). Pure SVG + CSS animation; each scene only animates
  * while its door is open and on screen.
  */
 (function () {
   "use strict";
   var doc = document,
-    root = doc.documentElement,
     uid = 0;
 
   function whale(u) {
@@ -288,18 +286,5 @@
     else row.classList.add("vis");
   }
 
-  /* ---------- the About doors get a little world behind them too ---------- */
-  var ORDER = ["whale", "space", "waves", "jungle"];
-  function aboutDoors() {
-    var ins = doc.querySelectorAll("#doorsRow .door-inside");
-    for (var i = 0; i < ins.length; i++) {
-      if (ins[i].firstChild) continue;
-      ins[i].innerHTML = scene(ORDER[i % 4]);
-      ins[i].classList.add("has-scn");
-    }
-  }
-
   stepInside();
-  if (root.classList.contains("ready")) aboutDoors();
-  else doc.addEventListener("site:ready", aboutDoors);
 })();

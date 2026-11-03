@@ -28,7 +28,7 @@ stored in a database and read in a password-protected admin inbox.
 
 - Dark / light theme with a sun-moon switch (remembers your choice)
 - Rotating role pill in the hero, smooth scroll reveal animations
-- "Doors" section that opens into About / Skills / Training / Strengths
+- "Doors" section that opens into About / Skills / Training / Strengths, each an animated panel (deep sea, space, sunset waves, jungle) with animated icons
 - **Projects with engineering visuals**: a concept circuit schematic for the Automatic Street Light Controller
   and a system block diagram for Home Automation. Both are animated and linked to an interactive simulation
   (drag the daylight slider and watch the transistor, relay and lamp switch; turn on Smart mode and watch idle
