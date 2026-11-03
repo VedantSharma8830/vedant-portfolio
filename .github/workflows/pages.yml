@@ -24,6 +24,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # If the API_BASE repository variable is set (Settings > Secrets and variables > Actions),
+      # point the static site at the deployed backend so the contact form posts to it.
+      - name: Point frontend at the deployed backend
+        if: ${{ vars.API_BASE != '' }}
+        env:
+          API_BASE: ${{ vars.API_BASE }}
+        run: |
+          echo "window.APP_CONFIG = { useApi: true, apiBase: \"$API_BASE\" };" > frontend/js/config.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: frontend
