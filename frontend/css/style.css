@@ -1203,6 +1203,299 @@ svg circle {
   box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.6);
 }
 
+/* project visuals: schematic / block diagram + simulation tabs */
+.viz {
+  position: relative;
+  width: min(460px, 100%);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+.viz-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.viz-tabs button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--soft);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 16px;
+  min-height: 40px;
+  cursor: pointer;
+  transition:
+    background 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+.viz-tabs button[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.viz-panel {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+.viz-panel[hidden] {
+  display: none;
+}
+.viz-fig {
+  margin: 0;
+  width: 100%;
+  padding: 18px 16px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.6s var(--ease),
+    box-shadow 0.6s var(--ease);
+}
+.viz-fig:hover {
+  transform: translateY(-4px);
+}
+.viz-fig figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.sch {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.sch .w,
+.sch .w path,
+.sch .w rect,
+.sch .w circle,
+.sch path.w,
+.sch circle.w,
+.sch .blade {
+  fill: none;
+  stroke: var(--soft);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sch .blk rect,
+.sch .blk2,
+.sch .core rect,
+.sch .ap rect {
+  fill: var(--card2);
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+.sch .core rect {
+  stroke: color-mix(in srgb, var(--accent) 60%, transparent);
+  stroke-width: 2;
+}
+.sch .lbl text,
+.sch .ap text,
+.sch text.lbl {
+  fill: var(--text);
+  font-family: var(--f-body);
+  font-size: 12px;
+  font-weight: 600;
+}
+.sch .lbl .sm {
+  fill: var(--muted);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+.sch .lbl text.end {
+  text-anchor: end;
+}
+.sch .lbl.c text,
+.sch .ap text,
+.sch text.c {
+  text-anchor: middle;
+}
+.sch .arw,
+.sch .dot,
+.sch .pin {
+  fill: var(--soft);
+}
+.sch .ldr-rays path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  transition: opacity 0.4s;
+}
+.sch .link {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 5;
+}
+.sch .flow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 6 10;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.sch .blade {
+  transform-origin: 300px 100px;
+  transition: transform 0.35s var(--ease);
+}
+.sch .glow {
+  fill: var(--accent);
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.4s;
+}
+.viz.night .ldr-rays path {
+  opacity: 0.15;
+}
+.viz.on .sch .flow,
+.viz[data-viz="home"] .sch .flow.in,
+.viz[data-viz="home"] .sch .flow.fb,
+.viz[data-viz="home"] .sch .flow.out,
+.viz[data-viz="home"] .ap.on .flow {
+  opacity: 1;
+  animation: flow 0.9s linear infinite;
+}
+.viz.on .sch .blade {
+  transform: rotate(28deg);
+}
+.viz.on .sch .glow {
+  opacity: 0.55;
+}
+.viz.on .sch .lamp circle.w {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+.sch .ap rect {
+  transition:
+    fill 0.35s,
+    stroke 0.35s;
+}
+.sch .ap.on rect {
+  fill: color-mix(in srgb, var(--accent) 22%, var(--card2));
+  stroke: var(--accent);
+}
+.viz.smart .sch .core rect {
+  fill: color-mix(in srgb, var(--accent) 18%, var(--card2));
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+.viz-ctl {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  font-size: 14px;
+  color: var(--soft);
+}
+.viz-read b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.viz-range {
+  flex: 1;
+  min-width: 120px;
+  accent-color: var(--accent);
+  height: 32px;
+}
+.viz-state {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  min-width: 92px;
+  text-align: center;
+}
+.viz.on .viz-state {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+.viz[data-viz="home"] .viz-ctl {
+  justify-content: space-between;
+}
+.viz-btn {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+.viz-btn.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+.viz .phone {
+  margin-top: 18px;
+}
+[data-motion="off"] .sch .flow {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sch .flow {
+    animation: none !important;
+  }
+}
+
+/* footer backend status */
+.api-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--soft);
+}
+.api-badge[hidden] {
+  display: none;
+}
+.api-badge b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.api-badge i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2fbf71;
+  box-shadow: 0 0 0 0 rgba(47, 191, 113, 0.6);
+  animation: ping 2s infinite;
+}
+@keyframes ping {
+  70% {
+    box-shadow: 0 0 0 8px rgba(47, 191, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 191, 113, 0);
+  }
+}
+[data-motion="off"] .api-badge i {
+  animation: none;
+}
+
 /* street demo */
 .st-sky {
   position: absolute;

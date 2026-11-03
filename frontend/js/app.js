@@ -560,6 +560,68 @@
         "</div></div>"
       );
     }
+    // Engineering view (schematic / block diagram) + interactive simulation, as tabs
+    var SCHEMATIC = {
+      street:
+        '<svg class="sch" viewBox="0 0 440 290" role="img" aria-labelledby="schT1 schD1"><title id="schT1">Automatic street light controller schematic</title><desc id="schD1">An LDR and resistor form a voltage divider. When it gets dark the LDR resistance rises, the transistor turns on, the relay coil is energised and its contact switches the 230 volt street lamp on.</desc><g class="w"><path d="M20 40H230"/><path d="M20 262H230"/><path d="M60 40V66l-8 4 16 8-16 8 16 8-16 8 8 4V150"/><path d="M60 150V176M60 236V262"/><rect x="49" y="176" width="22" height="60" rx="3"/><path d="M60 150H82l4-8 8 16 8-16 8 16 8-16 4 8H138"/><path d="M138 132V168"/><path d="M138 142L170 124V108"/><path d="M138 158L170 176V262"/><path d="M170 108V96M170 58V40"/><rect x="158" y="58" width="24" height="38" rx="3"/><path d="M170 52H206V60M206 94V102H170"/><path d="M196 86h20M206 86l-10-18h20z"/></g><path class="arw" d="M160 168l10 8-12 1z"/><g class="ldr-rays"><path d="M18 186l20 10M18 204l20 10"/><path d="M38 196l-7-1 3-5M38 214l-7-1 3-5"/></g><circle class="dot" cx="60" cy="150" r="3.5"/><path class="flow dc" d="M170 40V58M170 96V108L138 142M138 158L170 176V262"/><path class="link" d="M234 77H300"/><g class="w ac"><circle cx="268" cy="166" r="16"/><path d="M258 166c4-9 8-9 10 0s6 9 10 0"/><path d="M268 150V100H300"/><path d="M330 100H410V150M410 182V232H268V182"/></g><path class="blade" d="M300 100L328 86"/><circle class="pin" cx="300" cy="100" r="3"/><circle class="pin" cx="330" cy="100" r="3"/><g class="lamp"><circle class="glow" cx="410" cy="166" r="30"/><circle class="w" cx="410" cy="166" r="16"/><path class="w" d="M399 155l22 22M421 155l-22 22"/></g><path class="flow ac" d="M268 150V100H300L330 100H410V150M410 182V232H268V182"/><g class="lbl"><text x="20" y="32">+12 V DC</text><text x="20" y="282">GND</text><text x="74" y="96">R1 10k</text><text x="78" y="212" class="ldr-v">LDR</text><text x="86" y="140">R2 1k</text><text x="180" y="150">Q1</text><text x="180" y="163" class="sm">BC547</text><text x="120" y="80">Relay</text><text x="219" y="70" class="sm">D1</text><text x="256" y="196" class="end">230 V AC</text><text x="388" y="214">Lamp</text></g></svg>',
+      home: '<svg class="sch" viewBox="0 0 440 320" role="img" aria-labelledby="schT2 schD2"><title id="schT2">Home automation system block diagram</title><desc id="schD2">Sensors and a phone app send inputs to a controller running the smart logic. The controller drives a relay module that switches the lights, fan, AC and TV, and a power monitor reports energy use back to the controller.</desc><g class="blk"><rect x="10" y="22" width="112" height="44" rx="10"/><rect x="10" y="80" width="112" height="44" rx="10"/><rect x="10" y="138" width="112" height="44" rx="10"/><rect x="10" y="196" width="112" height="44" rx="10"/></g><g class="lbl c"><text x="66" y="42">Motion</text><text x="66" y="57" class="sm">PIR sensor</text><text x="66" y="100">Light</text><text x="66" y="115" class="sm">LDR sensor</text><text x="66" y="158">Temperature</text><text x="66" y="173" class="sm">sensor</text><text x="66" y="216">Phone app</text><text x="66" y="231" class="sm">manual control</text></g><path class="w" d="M122 44H146V218H122M122 102H146M122 160H146M146 131H164"/><path class="flow in" d="M122 44H146V131H164M122 102H146M122 160H146M122 218H146V131"/><g class="core"><rect x="164" y="88" width="112" height="86" rx="14"/></g><g class="lbl c"><text x="220" y="116">Controller</text><text x="220" y="133" class="sm">smart logic (AI)</text><text x="220" y="156" class="sm mode">Smart mode: off</text></g><path class="w" d="M276 131H300"/><path class="flow out" d="M276 131H300"/><rect class="blk2" x="300" y="34" width="34" height="192" rx="8"/><text class="lbl c v" x="317" y="131" transform="rotate(-90 317 131)">Relays</text><g class="apps"><g class="ap" data-ap="0"><path class="w" d="M334 52H352"/><path class="flow" d="M334 52H352"/><rect x="352" y="34" width="80" height="36" rx="9"/><text x="392" y="56">Lights</text></g><g class="ap" data-ap="1"><path class="w" d="M334 104H352"/><path class="flow" d="M334 104H352"/><rect x="352" y="86" width="80" height="36" rx="9"/><text x="392" y="108">Fan</text></g><g class="ap" data-ap="2"><path class="w" d="M334 156H352"/><path class="flow" d="M334 156H352"/><rect x="352" y="138" width="80" height="36" rx="9"/><text x="392" y="160">AC</text></g><g class="ap" data-ap="3"><path class="w" d="M334 208H352"/><path class="flow" d="M334 208H352"/><rect x="352" y="190" width="80" height="36" rx="9"/><text x="392" y="212">TV</text></g></g><g class="blk"><rect x="164" y="254" width="112" height="44" rx="10"/></g><g class="lbl c"><text x="220" y="274">Power monitor</text><text x="220" y="289" class="sm pw">100% in use</text></g><path class="w" d="M392 226V276H276M220 254V174"/><path class="flow fb" d="M392 226V276H276M220 254V174"/></svg>',
+    };
+    var CAPTION = {
+      street:
+        "Concept schematic with typical part values: LDR divider \u2192 transistor \u2192 relay \u2192 230 V lamp.",
+      home: "System block diagram: sensors and the phone app feed the controller, which switches each appliance through a relay.",
+    };
+    function vizControls(kind) {
+      if (kind === "home")
+        return '<div class="viz-ctl"><span class="viz-read"><b class="hm-pct2">100%</b> power in use</span><button type="button" class="viz-btn hm-auto2" aria-pressed="false">Smart mode</button></div>';
+      return (
+        '<div class="viz-ctl"><label class="viz-read" for="ldrB"><span>Daylight</span> <b class="st-val2">80%</b></label>' +
+        '<input id="ldrB" class="viz-range" type="range" min="0" max="100" value="80" aria-label="Daylight level sensed by the LDR">' +
+        '<span class="viz-state" aria-live="polite">Lamp OFF</span></div>'
+      );
+    }
+    function vizCard(p, n) {
+      var kind = p.demo === "home" ? "home" : "street";
+      var id = "viz" + n;
+      return (
+        '<div class="viz" data-viz="' +
+        kind +
+        '">' +
+        '<div class="viz-tabs" role="tablist" aria-label="' +
+        esc(p.name) +
+        ' visuals">' +
+        '<button type="button" role="tab" id="' +
+        id +
+        't1" aria-controls="' +
+        id +
+        'a" aria-selected="true">' +
+        (kind === "home" ? "Block diagram" : "Circuit") +
+        "</button>" +
+        '<button type="button" role="tab" id="' +
+        id +
+        't2" aria-controls="' +
+        id +
+        'b" aria-selected="false" tabindex="-1">Simulation</button></div>' +
+        '<div class="viz-panel" role="tabpanel" id="' +
+        id +
+        'a" aria-labelledby="' +
+        id +
+        't1"><figure class="viz-fig">' +
+        SCHEMATIC[kind] +
+        "<figcaption>" +
+        CAPTION[kind] +
+        "</figcaption></figure>" +
+        vizControls(kind) +
+        "</div>" +
+        '<div class="viz-panel" role="tabpanel" id="' +
+        id +
+        'b" aria-labelledby="' +
+        id +
+        't2" hidden><div class="phone"><span class="demo-tag">Try it</span>' +
+        (kind === "home" ? homeDemo() : streetDemo()) +
+        "</div></div></div>"
+      );
+    }
     $("#projectList").innerHTML = CV.projects
       .map(function (p, n) {
         return (
@@ -587,12 +649,35 @@
           "</dd></div><div><dt>Result</dt><dd>" +
           esc(p.benefit) +
           "</dd></div></dl></div>" +
-          '<div class="p-stage reveal"><div class="phone"><span class="demo-tag">Try it</span>' +
-          (p.demo === "home" ? homeDemo() : streetDemo()) +
-          "</div></div></article>"
+          '<div class="p-stage reveal">' +
+          vizCard(p, n) +
+          "</div></article>"
         );
       })
       .join("");
+
+    $$(".viz").forEach(function (viz) {
+      var tabs = $$('[role="tab"]', viz);
+      function select(t) {
+        tabs.forEach(function (o) {
+          var on = o === t;
+          o.setAttribute("aria-selected", on ? "true" : "false");
+          o.tabIndex = on ? 0 : -1;
+          document.getElementById(o.getAttribute("aria-controls")).hidden = !on;
+        });
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener("click", function () {
+          select(t);
+        });
+        t.addEventListener("keydown", function (e) {
+          if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+          var next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+          select(next);
+          next.focus();
+        });
+      });
+    });
 
     $$('[data-demo="street"]').forEach(function (st) {
       var r = $("input", st),
@@ -600,7 +685,16 @@
         stat = $(".st-status", st),
         touched = false,
         dir = -1,
-        timer = null;
+        timer = null,
+        viz = st.closest(".viz"),
+        r2 = viz ? $(".viz-range", viz) : null;
+      if (r2)
+        r2.addEventListener("input", function () {
+          r.value = r2.value;
+          touched = true;
+          stop();
+          upd();
+        });
       function upd() {
         var v = +r.value,
           on = v < 35;
@@ -608,6 +702,14 @@
         st.classList.toggle("on", on);
         st.classList.toggle("night", v < 45);
         stat.textContent = on ? "ON" : "OFF";
+        if (viz) {
+          viz.classList.toggle("on", on);
+          viz.classList.toggle("night", v < 45);
+          r2.value = v;
+          $(".st-val2", viz).textContent = v + "%";
+          $(".viz-state", viz).textContent = on ? "Lamp ON" : "Lamp OFF";
+          $(".ldr-v", viz).textContent = on ? "LDR: dark" : "LDR: bright";
+        }
       }
       r.addEventListener("input", function () {
         touched = true;
@@ -636,7 +738,7 @@
             });
           },
           { threshold: 0.4 },
-        ).observe(st);
+        ).observe(viz || st);
       upd();
     });
     $$('[data-demo="home"]').forEach(function (hm) {
@@ -647,7 +749,13 @@
         bar = $(".hm-bar i", hm),
         pct = $(".hm-pct", hm),
         note = $(".hm-note", hm),
-        auto = $(".hm-auto", hm);
+        auto = $(".hm-auto", hm),
+        viz = hm.closest(".viz"),
+        auto2 = viz ? $(".hm-auto2", viz) : null;
+      if (auto2)
+        auto2.addEventListener("click", function () {
+          auto.click();
+        });
       var total = HM.reduce(function (s, a) {
         return s + a.w;
       }, 0);
@@ -665,6 +773,19 @@
         bar.style.width = Math.max(3, p) + "%";
         pct.textContent = p + "%";
         if (msg) note.textContent = msg;
+        if (viz) {
+          var smart = auto.classList.contains("on");
+          state.forEach(function (s, i) {
+            var ap = $('[data-ap="' + i + '"]', viz);
+            if (ap) ap.classList.toggle("on", s);
+          });
+          viz.classList.toggle("smart", smart);
+          $(".mode", viz).textContent = "Smart mode: " + (smart ? "on" : "off");
+          $(".pw", viz).textContent = p + "% in use";
+          $(".hm-pct2", viz).textContent = p + "%";
+          auto2.classList.toggle("on", smart);
+          auto2.setAttribute("aria-pressed", smart ? "true" : "false");
+        }
       }
       tiles.forEach(function (t, n) {
         t.addEventListener("click", function () {
