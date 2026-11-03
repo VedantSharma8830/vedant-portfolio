@@ -2875,3 +2875,38 @@ svg circle {
   transform: scaleX(var(--p, 0)) !important;
   transition: none !important;
 }
+
+/* cards slide in from the side; keep that off the page width */
+#journey {
+  overflow-x: clip;
+}
+
+/* living circuit board, behind everything */
+.circuit {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+  contain: strict;
+}
+.circuit.on {
+  opacity: 1;
+}
+.circuit canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  max-width: none;
+}
+.cb-base {
+  will-change: transform;
+}
+@media print {
+  .circuit {
+    display: none;
+  }
+}
