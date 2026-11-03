@@ -2,3 +2,5 @@ node_modules
 backend/data
 package-lock.json
 *.min.js
+cloudflare/profile.json
+.wrangler

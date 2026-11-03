@@ -1,7 +1,7 @@
 {
   "name": "vedant-portfolio",
-  "version": "1.0.0",
-  "description": "Personal portfolio website of Vedant J. Sharma, Electrical Engineering student. Frontend plus a Node.js/Express backend with a contact form API and admin inbox.",
+  "version": "1.1.0",
+  "description": "Personal portfolio website of Vedant J. Sharma, Electrical Engineering student. Frontend plus a Node.js/Express backend (and a serverless Cloudflare Workers version) with a contact form API and admin inbox.",
   "author": "Vedant J. Sharma",
   "license": "MIT",
   "private": true,
@@ -13,7 +13,9 @@
     "dev": "nodemon",
     "test": "node --test backend/tests/api.test.js",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:worker": "node scripts/build-worker.js",
+    "deploy:worker": "npm run build:worker && npx wrangler deploy"
   },
   "nodemonConfig": {
     "exec": "node backend/server.js",
@@ -35,7 +37,8 @@
     "portfolio",
     "express",
     "nodejs",
-    "electrical-engineering"
+    "electrical-engineering",
+    "cloudflare-workers"
   ],
   "dependencies": {
     "dotenv": "^16.6.1",

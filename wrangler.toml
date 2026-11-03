@@ -1,0 +1,22 @@
+# Cloudflare Workers config for the serverless backend (see cloudflare/worker.js)
+name = "vedant-portfolio"
+main = "cloudflare/worker.js"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./frontend"
+binding = "ASSETS"
+not_found_handling = "404-page"
+run_worker_first = true
+
+[vars]
+# Other sites allowed to call the API, comma-separated (e.g. your GitHub Pages URL)
+CORS_ORIGIN = ""
+
+# Create the database once with:  npx wrangler d1 create portfolio-db
+# then paste the database_id it prints below.
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

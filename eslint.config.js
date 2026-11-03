@@ -17,6 +17,10 @@ module.exports = [
     languageOptions: { sourceType: "commonjs", globals: globals.node },
   },
   {
+    files: ["cloudflare/**/*.js"],
+    languageOptions: { sourceType: "module", globals: { ...globals.browser, ...globals.serviceworker } },
+  },
+  {
     files: ["frontend/**/*.js"],
     languageOptions: { sourceType: "script", globals: globals.browser },
   },

@@ -14,3 +14,9 @@ npm-debug.log*
 *.log
 .DS_Store
 Thumbs.db
+
+# generated from frontend/js/data.js by npm run build:worker
+cloudflare/profile.json
+
+# wrangler local state
+.wrangler/
