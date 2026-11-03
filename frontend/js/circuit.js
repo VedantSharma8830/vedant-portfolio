@@ -2,7 +2,9 @@
  * Living circuit board behind the page: faint gold traces with solder pads
  * and a few IC footprints, current pulses running along them, sparks, a
  * three-phase waveform across the hero and a soft glow under the cursor.
- * One fixed canvas pair, no libraries. Static and faint for reduced motion.
+ * Arcs jump between nearby pads now and then, and a click or tap anywhere
+ * fires a burst of current and sparks out from that point.
+ * No libraries. Static and faint for reduced motion.
  */
 (function () {
   "use strict";
@@ -29,7 +31,13 @@
     pads = [],
     chips = [],
     pulses = [],
-    sparks = [];
+    sparks = [],
+    arcs = [],
+    bursts = [],
+    nextArc = 2;
+  var topC = null,
+    tctx = null,
+    topOn = false;
   var col = { r: 255, g: 210, b: 63 },
     light = false;
   var off = 0,
@@ -248,10 +256,10 @@
 
   /* how strongly a point shows: softer behind the reading column */
   function mask(x) {
-    if (mobile) return 0.8;
+    if (mobile) return 1;
     var u = Math.abs(x - W / 2) / (W / 2);
     u = Math.min(1, Math.max(0, (u - 0.25) / 0.55));
-    return 0.42 + 0.58 * u * u * (3 - 2 * u);
+    return 0.6 + 0.4 * u * u * (3 - 2 * u);
   }
 
   function pathOf(g, tr) {
@@ -263,7 +271,7 @@
   function drawBoard(g, k) {
     g.lineCap = "round";
     g.lineJoin = "round";
-    g.lineWidth = 1.15;
+    g.lineWidth = 1.3;
     g.strokeStyle = rgba(k);
     traces.forEach(function (tr) {
       pathOf(g, tr);
@@ -307,7 +315,7 @@
     base.style.height = tileH * 2 + "px";
     bctx.setTransform(bdpr, 0, 0, bdpr, 0, 0);
     bctx.clearRect(0, 0, W, tileH * 2);
-    var k = light ? 0.2 : 0.13;
+    var k = light ? 0.26 : 0.22;
     drawBoard(bctx, k);
     bctx.translate(0, tileH);
     drawBoard(bctx, k);
@@ -328,8 +336,8 @@
     p.tr = tr;
     p.dir = tr.a.pin ? 1 : Math.random() < 0.5 ? 1 : -1;
     p.s = 0;
-    p.v = rnd(70, 140);
-    p.tail = rnd(50, 110);
+    p.v = rnd(110, 210);
+    p.tail = rnd(70, 150);
     p.wait = delay == null ? rnd(0.2, 2.6) : delay;
     return p;
   }
@@ -337,7 +345,7 @@
     pulses = [];
     sparks = [];
     if (!traces.length) return;
-    var n = mobile ? 7 : 16;
+    var n = mobile ? 12 : 26;
     for (var i = 0; i < n; i++) pulses.push(newPulse({}, rnd(0, 3)));
     var m = mobile ? 5 : 12;
     for (i = 0; i < m; i++)
@@ -371,7 +379,7 @@
     at(tr, head, P1);
     var m = mask(P1[0]);
     ctx.globalAlpha = m;
-    ctx.lineWidth = 1.7;
+    ctx.lineWidth = p.hot ? 3 : 2.3;
     for (var i = 9; i >= 0; i--) {
       var s0 = head - p.dir * seg * (10 - i),
         s1 = head - p.dir * seg * (9 - i);
@@ -385,8 +393,9 @@
       ctx.stroke();
     }
     at(tr, Math.max(0, Math.min(tr.len, head)), P1);
-    ctx.globalAlpha = m * (light ? 0.45 : 0.85);
-    ctx.drawImage(glowSprite, P1[0] - 12, P1[1] + dy - 12, 24, 24);
+    ctx.globalAlpha = m * (light ? 0.55 : 1);
+    var gs = p.hot ? 56 : 40;
+    ctx.drawImage(glowSprite, P1[0] - gs / 2, P1[1] + dy - gs / 2, gs, gs);
     ctx.globalAlpha = 1;
   }
 
@@ -394,7 +403,7 @@
     var y = pd.y + dy;
     if (y < -30 || y > VH + 30) return;
     var a = pd.f * mask(pd.x),
-      s = 22 + 30 * pd.f;
+      s = 28 + 54 * pd.f;
     ctx.globalAlpha = a * (light ? 0.3 : 0.9);
     ctx.drawImage(glowSprite, pd.x - s / 2, y - s / 2, s, s);
     ctx.globalAlpha = 1;
@@ -490,6 +499,10 @@
     var dys = [-off, tileH - off];
     for (var i = 0; i < pads.length; i++) {
       var pd = pads[i];
+      if (pd.dl > 0) {
+        pd.dl -= dt;
+        if (pd.dl <= 0) pd.f = 1;
+      }
       if (pd.f > 0) {
         pd.f = Math.max(0, pd.f - dt * 1.4);
         drawFlash(pd, dys[0]);
@@ -505,7 +518,8 @@
       p.s += p.v * sp * dt;
       if (p.s - p.tail > p.tr.len) {
         (p.dir > 0 ? p.tr.b : p.tr.a).f = 1;
-        newPulse(p);
+        if (p.hot) pulses.splice(i--, 1);
+        else newPulse(p);
         continue;
       }
       drawPulse(p, dys[0]);
@@ -525,6 +539,30 @@
       ctx.drawImage(glowSprite, sx - 6 * s.r, s.y - 6 * s.r, 12 * s.r, 12 * s.r);
     }
     ctx.globalAlpha = 1;
+    nextArc -= dt;
+    if (nextArc <= 0 && pads.length > 2) {
+      spawnArc(dys);
+      nextArc = rnd(mobile ? 1.6 : 1, mobile ? 3.4 : 2.6) / (1 + boost * 0.3);
+    }
+    for (i = arcs.length - 1; i >= 0; i--) {
+      var ar = arcs[i];
+      ar.t += dt;
+      if (ar.t > ar.life) {
+        arcs.splice(i, 1);
+        continue;
+      }
+      var dyk = dys[ar.k];
+      drawBolt(
+        ctx,
+        ar.a.x,
+        ar.a.y + dyk,
+        ar.b.x,
+        ar.b.y + dyk,
+        (Math.random() < 0.25 ? 0.35 : 1) * (1 - (ar.t / ar.life) * 0.6) * mask(ar.a.x),
+      );
+      ar.a.f = Math.max(ar.a.f, 0.9);
+      ar.b.f = Math.max(ar.b.f, 0.9);
+    }
     drawWave();
     if (mouse.on) {
       mouse.x += (mouse.tx - mouse.x) * Math.min(1, dt * 9);
@@ -532,6 +570,239 @@
       drawLens(dys);
     }
     ctx.globalCompositeOperation = "source-over";
+    if (bursts.length) drawBursts(dt, dys);
+    else if (topOn) {
+      tctx.setTransform(1, 0, 0, 1, 0, 0);
+      tctx.clearRect(0, 0, topC.width, topC.height);
+      topOn = false;
+    }
+  }
+
+  /* ---------- lightning: a jagged line, redrawn every frame so it flickers ---------- */
+  function boltPath(g, x0, y0, x1, y1, rough) {
+    var pts = [
+        [x0, y0],
+        [x1, y1],
+      ],
+      disp = Math.hypot(x1 - x0, y1 - y0) * rough,
+      i;
+    for (var lv = 0; lv < 4; lv++) {
+      var nx = [];
+      for (i = 0; i < pts.length - 1; i++) {
+        var a = pts[i],
+          b = pts[i + 1],
+          dx = b[1] - a[1],
+          dy = a[0] - b[0],
+          l = Math.hypot(dx, dy) || 1,
+          o = (Math.random() - 0.5) * disp;
+        nx.push(a);
+        nx.push([(a[0] + b[0]) / 2 + (dx / l) * o, (a[1] + b[1]) / 2 + (dy / l) * o]);
+      }
+      nx.push(pts[pts.length - 1]);
+      pts = nx;
+      disp *= 0.55;
+    }
+    g.beginPath();
+    g.moveTo(pts[0][0], pts[0][1]);
+    for (i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]);
+  }
+  function drawBolt(g, x0, y0, x1, y1, a) {
+    if (a <= 0.01) return;
+    boltPath(g, x0, y0, x1, y1, 0.32);
+    g.lineWidth = 6;
+    g.strokeStyle = rgba(0.2 * a);
+    g.stroke();
+    g.lineWidth = 2.2;
+    g.strokeStyle = rgba(0.65 * a);
+    g.stroke();
+    g.lineWidth = 1;
+    g.strokeStyle = light ? rgba(0.9 * a) : "rgba(255,250,232," + (0.95 * a).toFixed(3) + ")";
+    g.stroke();
+  }
+  function spawnArc(dys) {
+    var vh = win.innerHeight;
+    for (var tries = 0; tries < 14; tries++) {
+      var a = pads[irnd(0, pads.length - 1)],
+        k = Math.random() < 0.5 ? 0 : 1,
+        ay = a.y + dys[k];
+      if (ay < 30 || ay > vh - 30 || (!mobile && mask(a.x) < 0.75)) continue;
+      var best = null,
+        bd = 1e9;
+      for (var i = 0; i < pads.length; i++) {
+        var b = pads[i];
+        if (b === a) continue;
+        var d = Math.hypot(b.x - a.x, b.y - a.y);
+        if (d > 60 && d < 220 && d < bd && Math.random() < 0.6) {
+          best = b;
+          bd = d;
+        }
+      }
+      if (!best) continue;
+      arcs.push({ a: a, b: best, k: k, life: rnd(0.25, 0.5), t: 0 });
+      return;
+    }
+  }
+
+  /* ---------- click / tap: a burst of current out from the point ---------- */
+  function sizeTop() {
+    if (!topC) return;
+    topC.width = Math.round(win.innerWidth * dpr);
+    topC.height = Math.round(win.innerHeight * dpr);
+    topC.style.width = win.innerWidth + "px";
+    topC.style.height = win.innerHeight + "px";
+  }
+  function ensureTop() {
+    if (topC) return;
+    topC = document.createElement("canvas");
+    topC.className = "cb-top";
+    topC.setAttribute("aria-hidden", "true");
+    tctx = topC.getContext("2d");
+    document.body.appendChild(topC);
+    sizeTop();
+  }
+  function hotPulses(x, y, reach, max, speed) {
+    var made = 0;
+    for (var k = 0; k < 2 && made < max; k++) {
+      var dy = k ? tileH - off : -off;
+      for (var i = 0; i < traces.length && made < max; i++) {
+        var tr = traces[i],
+          b = tr.box;
+        if (b[2] < x - reach || b[0] > x + reach || b[3] + dy < y - reach || b[1] + dy > y + reach) continue;
+        var da = Math.hypot(tr.a.x - x, tr.a.y + dy - y),
+          db = Math.hypot(tr.b.x - x, tr.b.y + dy - y);
+        pulses.push({
+          tr: tr,
+          dir: da < db ? 1 : -1,
+          s: 0,
+          v: rnd(speed * 0.8, speed * 1.2),
+          tail: rnd(90, 170),
+          wait: Math.min(da, db) / (speed * 1.6),
+          hot: true,
+        });
+        made++;
+      }
+    }
+  }
+  function burst(x, y, big) {
+    if (!running) return;
+    ensureTop();
+    if (!tctx) return;
+    var n = Math.round((mobile ? 24 : 30) * (big ? 1.6 : 1)),
+      parts = [],
+      i;
+    for (i = 0; i < n; i++) {
+      var an = rnd(0, 6.2832),
+        v = rnd(140, big ? 640 : 460);
+      parts.push({
+        x: x,
+        y: y,
+        vx: Math.cos(an) * v,
+        vy: Math.sin(an) * v,
+        life: rnd(0.45, 1),
+        t: 0,
+        r: rnd(0.7, 1.6),
+      });
+    }
+    var near = [];
+    for (var k = 0; k < 2; k++) {
+      var dy = k ? tileH - off : -off;
+      for (i = 0; i < pads.length; i++) {
+        var pd = pads[i],
+          d = Math.hypot(pd.x - x, pd.y + dy - y);
+        if (d > 30 && d < (big ? 420 : 240)) near.push({ p: pd, k: k, d: d });
+      }
+    }
+    near.sort(function (a, b) {
+      return a.d - b.d;
+    });
+    var bolts = near.slice(0, big ? 6 : 3);
+    bolts.forEach(function (o) {
+      o.p.f = 1;
+    });
+    bursts.push({ x: x, y: y, t: 0, parts: parts, bolts: bolts, big: !!big });
+    if (bursts.length > 6) bursts.shift();
+    hotPulses(x, y, big ? 260 : 170, big ? 12 : 6, 460);
+    boost = Math.max(boost, big ? 4 : 2);
+    topOn = true;
+  }
+  function drawBursts(dt, dys) {
+    var g = tctx,
+      vw = win.innerWidth;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, vw, win.innerHeight);
+    g.globalCompositeOperation = light ? "source-over" : "lighter";
+    g.lineCap = "round";
+    for (var i = bursts.length - 1; i >= 0; i--) {
+      var b = bursts[i],
+        T = b.big ? 1.3 : 1,
+        j;
+      b.t += dt;
+      if (b.t > T) {
+        bursts.splice(i, 1);
+        continue;
+      }
+      var u = Math.min(1, b.t / (0.55 * T)),
+        R = (b.big ? 300 : 190) * (1 - Math.pow(1 - u, 3));
+      if (u < 1) {
+        g.strokeStyle = rgba(0.95 * (1 - u));
+        g.lineWidth = 4 * (1 - u) + 0.6;
+        g.beginPath();
+        g.arc(b.x, b.y, R, 0, 6.2832);
+        g.stroke();
+      }
+      if (b.t < 0.25) {
+        var fs = (b.big ? 170 : 110) * (1 - (b.t / 0.25) * 0.5);
+        g.globalAlpha = 1 - b.t / 0.25;
+        g.drawImage(glowSprite, b.x - fs / 2, b.y - fs / 2, fs, fs);
+        g.globalAlpha = 1;
+      }
+      if (b.t < 0.34)
+        for (j = 0; j < b.bolts.length; j++) {
+          var bo = b.bolts[j];
+          drawBolt(
+            g,
+            b.x,
+            b.y,
+            bo.p.x,
+            bo.p.y + dys[bo.k],
+            (Math.random() < 0.3 ? 0.4 : 1) * (1 - b.t / 0.34),
+          );
+        }
+      for (j = 0; j < b.parts.length; j++) {
+        var s = b.parts[j];
+        if (s.t > s.life) continue;
+        s.t += dt;
+        var dr = Math.pow(0.05, dt),
+          ox = s.x,
+          oy = s.y,
+          a = 1 - s.t / s.life;
+        s.vx *= dr;
+        s.vy = s.vy * dr + 300 * dt;
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
+        g.strokeStyle = rgba(a);
+        g.lineWidth = 1.6 * s.r;
+        g.beginPath();
+        g.moveTo(ox - s.vx * 0.025, oy - s.vy * 0.025);
+        g.lineTo(s.x, s.y);
+        g.stroke();
+        g.globalAlpha = a;
+        g.drawImage(glowSprite, s.x - 7 * s.r, s.y - 7 * s.r, 14 * s.r, 14 * s.r);
+        g.globalAlpha = 1;
+      }
+    }
+    g.globalCompositeOperation = "source-over";
+  }
+  /* power-on: every pad lights up in a wave out from the switch */
+  function surge(x, y) {
+    if (!running) return;
+    var dy = -off;
+    for (var i = 0; i < pads.length; i++) {
+      var pd = pads[i];
+      pd.dl = 0.05 + Math.hypot(pd.x - x, pd.y + dy - y) / 1500;
+    }
+    hotPulses(x, y, 2000, mobile ? 18 : 40, 620);
+    boost = 5;
   }
 
   function sizeFx() {
@@ -541,6 +812,7 @@
     fx.style.width = W + "px";
     fx.style.height = VH + "px";
     lens.width = lens.height = Math.round(340 * dpr);
+    sizeTop();
   }
 
   function start() {
@@ -617,6 +889,16 @@
     start();
 
     win.addEventListener("resize", onResize);
+    win.addEventListener(
+      "pointerdown",
+      function (e) {
+        if (!running || e.button > 0) return;
+        var el = e.target;
+        if (el && el.closest && el.closest("input,textarea,select,label,.panel,.room,.pwr")) return;
+        burst(e.clientX, e.clientY, false);
+      },
+      { passive: true },
+    );
     document.addEventListener("visibilitychange", function () {
       document.hidden ? stop() : start();
     });
@@ -653,9 +935,26 @@
     setTimeout(measureHero, 1500);
   }
 
+  var inited = false;
+  function initOnce() {
+    if (inited) return;
+    inited = true;
+    init();
+  }
+  win.vsCircuit = {
+    burst: function (x, y, big) {
+      if (running) burst(x, y, big);
+    },
+  };
+  /* the power-on intro switches the board on at the moment the breaker closes */
+  document.addEventListener("power:on", function (e) {
+    initOnce();
+    var d = e.detail || {};
+    if (d.x != null) surge(d.x, d.y);
+  });
   function later() {
-    if (win.requestIdleCallback) requestIdleCallback(init, { timeout: 1200 });
-    else setTimeout(init, 300);
+    if (win.requestIdleCallback) requestIdleCallback(initOnce, { timeout: 1200 });
+    else setTimeout(initOnce, 300);
   }
   if (document.readyState === "complete") later();
   else win.addEventListener("load", later);

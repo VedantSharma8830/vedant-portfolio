@@ -2910,3 +2910,708 @@ svg circle {
     display: none;
   }
 }
+
+/* ===================== power-on experience ===================== */
+/* cover until the intro script takes over; clears itself if scripts never run */
+html.pwr body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #060609;
+  pointer-events: none;
+  animation: pwrFail 0.01s 3.2s forwards;
+}
+@keyframes pwrFail {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.pwr-hold.js .hero .reveal.in,
+.pwr-hold.js .hero .stats.reveal.in > div {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.pwr {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.pwr.out {
+  opacity: 0;
+  pointer-events: none;
+}
+.pwr-cv {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pwr-sw {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  animation: pwrIn 0.35s var(--ease) both;
+  transition:
+    opacity 0.4s 0.5s,
+    transform 0.5s 0.5s var(--ease);
+}
+.pwr.on .pwr-sw {
+  opacity: 0;
+  transform: scale(0.86);
+}
+@keyframes pwrIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+.pwr-sw svg {
+  width: 116px;
+  height: 174px;
+  overflow: visible;
+}
+.pwr-body {
+  fill: #15151b;
+  stroke: #3a3a44;
+  stroke-width: 2;
+}
+.pwr-slot {
+  fill: #09090c;
+  stroke: #2a2a31;
+  stroke-width: 2;
+}
+.pwr-lever rect {
+  fill: #2d2d35;
+  stroke: #55555f;
+  stroke-width: 2;
+}
+.pwr-lever path {
+  stroke: #6b6b75;
+  stroke-width: 2;
+  fill: none;
+}
+.pwr-lever {
+  transition: transform 0.14s cubic-bezier(0.5, 0, 0.2, 1.4);
+}
+.pwr.on .pwr-lever {
+  transform: translateY(-44px);
+}
+.pwr.on .pwr-lever rect {
+  fill: var(--accent);
+  stroke: #fff6cc;
+}
+.pwr.on .pwr-lever path {
+  stroke: rgba(0, 0, 0, 0.35);
+}
+.pwr-led {
+  fill: #3b1414;
+  transition: fill 0.1s;
+}
+.pwr.on .pwr-led {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+.pwr-sw text {
+  fill: #6b6b75;
+  font: 600 12px var(--f-body);
+  letter-spacing: 0.2em;
+  text-anchor: middle;
+}
+.pwr-lbl {
+  margin: 0;
+  color: #8a8a94;
+  font: 600 13px var(--f-body);
+  letter-spacing: 0.24em;
+}
+.pwr-on,
+.pwr.on .pwr-off {
+  display: none;
+}
+.pwr.on .pwr-on {
+  display: inline;
+  color: var(--accent);
+}
+.pwr-skip {
+  position: absolute;
+  bottom: max(22px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #34343c;
+  background: rgba(20, 20, 26, 0.8);
+  color: #c9c9d1;
+  font: 600 13px var(--f-body);
+  cursor: pointer;
+}
+
+/* hero centrepiece: the 3D winding round the portrait */
+.hero-copy {
+  position: relative;
+  z-index: 3;
+}
+.hero-art .avatar {
+  z-index: 1;
+}
+.hero-art .chip {
+  z-index: 3;
+}
+.h3d {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 250%;
+  height: 250%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+.h3d.on {
+  opacity: 1;
+}
+.h3d-back {
+  z-index: 0;
+}
+.h3d-front {
+  z-index: 2;
+}
+.hero-art.has-3d .art-ring {
+  opacity: 0.45;
+}
+
+/* bursts and sparks from a click or tap, above the page */
+.cb-top {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* glowing cursor */
+.cur-dot,
+.cur-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 400;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 50%;
+}
+.cur-dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: #fff8d8;
+  box-shadow:
+    0 0 6px 1px var(--accent),
+    0 0 18px 4px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.cur-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+}
+.cur-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  transition:
+    transform 0.25s var(--ease),
+    background 0.25s,
+    border-color 0.25s;
+}
+.has-cur.cur-on .cur-dot,
+.has-cur.cur-on .cur-ring {
+  opacity: 1;
+}
+.cur-hot .cur-ring::after {
+  transform: scale(1.7);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.cur-down .cur-ring::after {
+  transform: scale(0.7);
+}
+.cur-txt .cur-dot,
+.cur-txt .cur-ring {
+  opacity: 0 !important;
+}
+.has-cur,
+.has-cur * {
+  cursor: none !important;
+}
+.has-cur input:not([type="range"]),
+.has-cur textarea,
+.has-cur select {
+  cursor: text !important;
+}
+
+/* dusk at the street-light project */
+.dusk {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 34% 9%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 58% 22%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 76% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 30%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 22% 34%, #fff 50%, transparent 51%),
+    linear-gradient(180deg, rgba(4, 8, 26, 0.84), rgba(3, 5, 16, 0.7));
+  transition: -webkit-mask-size 0.6s;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 64%, transparent 0, transparent 0, #000 0);
+  mask-image: radial-gradient(ellipse at 50% 64%, transparent 0, transparent 0, #000 0);
+}
+.dusk.lit {
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 62% at 36% 62%,
+    transparent 34%,
+    rgba(0, 0, 0, 0.5) 66%,
+    #000 100%
+  );
+  mask-image: radial-gradient(ellipse 70% 62% at 36% 62%, transparent 34%, rgba(0, 0, 0, 0.5) 66%, #000 100%);
+}
+.dusk-moon {
+  position: absolute;
+  right: 9%;
+  top: 13%;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  box-shadow:
+    inset -11px 6px 0 0 #f4ecd0,
+    0 0 40px rgba(244, 236, 208, 0.25);
+  transform: rotate(-20deg);
+}
+.slamp {
+  --n: 0;
+  position: fixed;
+  left: max(10px, 2.5vw);
+  bottom: 0;
+  height: 78vh;
+  width: calc(78vh * 160 / 600);
+  z-index: 46;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(calc((1 - var(--n)) * 60%));
+  visibility: hidden;
+}
+.slamp.up {
+  opacity: 1;
+  visibility: visible;
+}
+.lamp-svg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  overflow: visible;
+}
+.lp-pole,
+.lp-wire {
+  fill: none;
+  stroke: #4b4b58;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.lp-wire {
+  stroke-width: 2;
+  stroke: #33333d;
+}
+.lp-head {
+  fill: #2c2c35;
+  stroke: #5b5b68;
+  stroke-width: 2;
+}
+.lp-bulb {
+  fill: #3a3a44;
+  transition: fill 0.2s;
+}
+.lp-box {
+  fill: #1f1f27;
+  stroke: #4b4b58;
+  stroke-width: 2;
+}
+.lp-ldr {
+  fill: #8a5a2b;
+  stroke: #c88b4a;
+  stroke-width: 1.5;
+}
+.slamp.on .lp-bulb {
+  fill: #fff4c2;
+  filter: drop-shadow(0 0 10px var(--accent)) drop-shadow(0 0 26px var(--accent));
+  animation: lampFlick 0.5s steps(1) 1;
+}
+.lamp-cone {
+  position: absolute;
+  left: calc(75.6% - 260px);
+  top: 8.4%;
+  width: 520px;
+  height: 91.6%;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 50% 95% at 50% 0,
+    rgba(255, 228, 150, 0.36),
+    rgba(255, 210, 63, 0.1) 55%,
+    transparent 80%
+  );
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  mix-blend-mode: screen;
+}
+.slamp.on .lamp-cone {
+  opacity: 1;
+  animation: lampFlick 0.5s steps(1) 1;
+}
+@keyframes lampFlick {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0.3;
+  }
+  55% {
+    opacity: 1;
+  }
+}
+.lamp-hud {
+  position: absolute;
+  left: 40px;
+  top: 52%;
+  display: grid;
+  gap: 3px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(10, 12, 24, 0.85);
+  border: 1px solid #2e3245;
+  color: #b9bed2;
+  font: 500 12px var(--f-body);
+  white-space: nowrap;
+}
+.lamp-hud b {
+  color: #e9ecf6;
+  font-weight: 700;
+}
+.lh-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.lh-sm {
+  font-size: 11px;
+}
+.lh-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f2c94c;
+  box-shadow: 0 0 8px #f2c94c;
+}
+.lamp-hud.dark .lh-dot {
+  background: #3b4fd8;
+  box-shadow: 0 0 8px #5b6cff;
+}
+.slamp.on .lh-st {
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .slamp {
+    left: auto;
+    right: 2px;
+    height: 58vh;
+    width: calc(58vh * 160 / 600);
+  }
+  .lamp-svg {
+    transform: scaleX(-1);
+  }
+  .lamp-cone {
+    left: calc(24.4% - 180px);
+    width: 360px;
+  }
+  .lamp-hud {
+    left: auto;
+    right: 22px;
+    top: auto;
+    bottom: 8px;
+    padding: 6px 10px;
+  }
+  .dusk.lit {
+    -webkit-mask-image: radial-gradient(
+      ellipse 100% 62% at 50% 56%,
+      transparent 36%,
+      rgba(0, 0, 0, 0.5) 66%,
+      #000 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 100% 62% at 50% 56%,
+      transparent 36%,
+      rgba(0, 0, 0, 0.5) 66%,
+      #000 100%
+    );
+  }
+}
+
+/* appliances at the home-automation project */
+.ha {
+  grid-column: 1 / -1;
+  order: 3;
+  position: relative;
+  padding: 18px 18px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+}
+.ha-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.ha-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ha-ctrl i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #555;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+.ha.live .ha-ctrl i {
+  background: #3ddc84;
+  box-shadow: 0 0 8px #3ddc84;
+}
+.ha-meter b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.ha-bus {
+  position: relative;
+  height: 2px;
+  margin: 14px 12.5% 0;
+  background: var(--line);
+  overflow: hidden;
+}
+.ha-cur {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+.ha.live .ha-cur {
+  opacity: 1;
+  animation: haBus 1.4s linear infinite;
+}
+@keyframes haBus {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
+}
+.ha-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.ha-ap {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding-top: 0;
+  font-size: 13px;
+}
+.ha-drop {
+  width: 2px;
+  height: 16px;
+  background: var(--line);
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+.ha-ap.on .ha-drop {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.ha-ap svg {
+  width: 58px;
+  height: 58px;
+  overflow: visible;
+}
+.ha-ap b {
+  font-weight: 600;
+}
+.ha-st {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.ha-ap.on .ha-st {
+  color: var(--accent);
+}
+.ha-l,
+.ha-air path,
+.ha-wave {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s;
+}
+.ha-f {
+  fill: color-mix(in srgb, var(--muted) 40%, transparent);
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.ha-glow {
+  fill: var(--accent);
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.3s;
+}
+.ha-led {
+  fill: #555;
+}
+.ha-scr {
+  fill: transparent;
+  transition: fill 0.3s;
+}
+.ha-wave,
+.ha-air {
+  opacity: 0;
+}
+.ha-ap.on .ha-l,
+.ha-ap.on .ha-f {
+  stroke: var(--accent);
+}
+.ha-ap.on .ha-glow {
+  opacity: 0.55;
+}
+.ha-ap.on .ha-f {
+  fill: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.ha-ap.on .ha-fan {
+  animation: spin 0.7s linear infinite;
+  transform-origin: 24px 24px;
+}
+.ha-ap.on .ha-led {
+  fill: #3ddc84;
+}
+.ha-ap.on .ha-air {
+  opacity: 1;
+  animation: haAir 1.2s ease-in-out infinite;
+}
+.ha-ap.on .ha-air path {
+  stroke: #7fd3ff;
+}
+.ha-ap.on .ha-scr {
+  fill: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.ha-ap.on .ha-wave {
+  opacity: 1;
+  stroke: #fff;
+  stroke-width: 1.6;
+  stroke-dasharray: 60;
+  animation: haWave 1.6s linear infinite;
+}
+@keyframes haAir {
+  50% {
+    transform: translateY(3px);
+    opacity: 0.4;
+  }
+}
+@keyframes haWave {
+  from {
+    stroke-dashoffset: 120;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (max-width: 760px) {
+  .ha {
+    padding: 14px 10px 16px;
+  }
+  .ha-ap svg {
+    width: 44px;
+    height: 44px;
+  }
+  .ha-ap {
+    font-size: 12px;
+  }
+}
+
+/* bigger portrait on phones so the winding has room */
+@media (max-width: 960px) {
+  .hero-art {
+    width: min(206px, 54%);
+    margin: 34px 0 34px;
+  }
+}
+
+/* calm, static version */
+@media (prefers-reduced-motion: reduce) {
+  .pwr,
+  .cur-dot,
+  .cur-ring,
+  .dusk,
+  .slamp,
+  .cb-top {
+    display: none !important;
+  }
+  .ha-ap.on .ha-fan,
+  .ha-ap.on .ha-air,
+  .ha-ap.on .ha-wave,
+  .ha.live .ha-cur {
+    animation: none !important;
+  }
+}
+[data-motion="off"] .dusk,
+[data-motion="off"] .slamp,
+[data-motion="off"] .cur-dot,
+[data-motion="off"] .cur-ring {
+  display: none !important;
+}
+[data-motion="off"] .ha * {
+  animation: none !important;
+}
+@media print {
+  .pwr,
+  .dusk,
+  .slamp,
+  .cb-top,
+  .h3d,
+  .cur-dot,
+  .cur-ring {
+    display: none !important;
+  }
+}

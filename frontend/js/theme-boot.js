@@ -15,6 +15,15 @@
   if (p.font) d.setAttribute("data-font", p.font);
   if (p.motion === false) d.setAttribute("data-motion", "off");
   d.classList.add("js");
+  // Power-on intro once per visit (skipped for reduced motion).
+  try {
+    if (
+      p.motion !== false &&
+      !sessionStorage.getItem("vs-pwr") &&
+      !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)
+    )
+      d.classList.add("pwr");
+  } catch (e) {}
   // If the main script never finishes, show everything rather than leave sections hidden.
   setTimeout(function () {
     if (!d.classList.contains("ready")) d.classList.remove("js");
