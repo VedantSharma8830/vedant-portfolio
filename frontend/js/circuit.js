@@ -687,42 +687,38 @@
     if (!running) return;
     ensureTop();
     if (!tctx) return;
-    var n = Math.round((mobile ? 24 : 30) * (big ? 1.6 : 1)),
+    var n = big ? 8 : mobile ? 4 : 6,
       parts = [],
       i;
     for (i = 0; i < n; i++) {
-      var an = rnd(0, 6.2832),
-        v = rnd(140, big ? 640 : 460);
+      var an = (i / n) * 6.2832 + rnd(-0.35, 0.35),
+        v = rnd(70, big ? 150 : 115);
       parts.push({
         x: x,
         y: y,
         vx: Math.cos(an) * v,
         vy: Math.sin(an) * v,
-        life: rnd(0.45, 1),
+        life: rnd(0.22, 0.36),
         t: 0,
-        r: rnd(0.7, 1.6),
+        r: rnd(0.5, 0.9),
       });
     }
-    var near = [];
+    var reach = big ? 150 : mobile ? 90 : 120,
+      best = null;
     for (var k = 0; k < 2; k++) {
       var dy = k ? tileH - off : -off;
       for (i = 0; i < pads.length; i++) {
         var pd = pads[i],
           d = Math.hypot(pd.x - x, pd.y + dy - y);
-        if (d > 30 && d < (big ? 420 : 240)) near.push({ p: pd, k: k, d: d });
+        if (d > 20 && d < reach && (!best || d < best.d)) best = { p: pd, k: k, d: d };
       }
     }
-    near.sort(function (a, b) {
-      return a.d - b.d;
-    });
-    var bolts = near.slice(0, big ? 6 : 3);
-    bolts.forEach(function (o) {
-      o.p.f = 1;
-    });
+    var bolts = best ? [best] : [];
+    if (best) best.p.f = 1;
     bursts.push({ x: x, y: y, t: 0, parts: parts, bolts: bolts, big: !!big });
-    if (bursts.length > 6) bursts.shift();
-    hotPulses(x, y, big ? 260 : 170, big ? 12 : 6, 460);
-    boost = Math.max(boost, big ? 4 : 2);
+    if (bursts.length > 4) bursts.shift();
+    hotPulses(x, y, big ? 110 : 80, 2, 380);
+    boost = Math.max(boost, big ? 1 : 0.6);
     topOn = true;
   }
   function drawBursts(dt, dys) {
@@ -734,60 +730,53 @@
     g.lineCap = "round";
     for (var i = bursts.length - 1; i >= 0; i--) {
       var b = bursts[i],
-        T = b.big ? 1.3 : 1,
+        T = 0.42,
         j;
       b.t += dt;
       if (b.t > T) {
         bursts.splice(i, 1);
         continue;
       }
-      var u = Math.min(1, b.t / (0.55 * T)),
-        R = (b.big ? 300 : 190) * (1 - Math.pow(1 - u, 3));
+      var u = Math.min(1, b.t / T),
+        R = (b.big ? 80 : mobile ? 50 : 70) * (1 - Math.pow(1 - u, 3));
       if (u < 1) {
-        g.strokeStyle = rgba(0.95 * (1 - u));
-        g.lineWidth = 4 * (1 - u) + 0.6;
+        g.strokeStyle = rgba(0.7 * Math.pow(1 - u, 1.5));
+        g.lineWidth = 1.6 * (1 - u) + 0.4;
         g.beginPath();
         g.arc(b.x, b.y, R, 0, 6.2832);
         g.stroke();
       }
-      if (b.t < 0.25) {
-        var fs = (b.big ? 170 : 110) * (1 - (b.t / 0.25) * 0.5);
-        g.globalAlpha = 1 - b.t / 0.25;
+      if (b.t < 0.16) {
+        var fs = 34 * (1 - (b.t / 0.16) * 0.5);
+        g.globalAlpha = 0.7 * (1 - b.t / 0.16);
         g.drawImage(glowSprite, b.x - fs / 2, b.y - fs / 2, fs, fs);
         g.globalAlpha = 1;
       }
-      if (b.t < 0.34)
+      if (b.t < 0.18)
         for (j = 0; j < b.bolts.length; j++) {
           var bo = b.bolts[j];
-          drawBolt(
-            g,
-            b.x,
-            b.y,
-            bo.p.x,
-            bo.p.y + dys[bo.k],
-            (Math.random() < 0.3 ? 0.4 : 1) * (1 - b.t / 0.34),
-          );
+          drawBolt(g, b.x, b.y, bo.p.x, bo.p.y + dys[bo.k], 0.45 * (1 - b.t / 0.18));
         }
       for (j = 0; j < b.parts.length; j++) {
         var s = b.parts[j];
         if (s.t > s.life) continue;
         s.t += dt;
-        var dr = Math.pow(0.05, dt),
+        var dr = Math.pow(0.02, dt),
           ox = s.x,
           oy = s.y,
           a = 1 - s.t / s.life;
         s.vx *= dr;
-        s.vy = s.vy * dr + 300 * dt;
+        s.vy *= dr;
         s.x += s.vx * dt;
         s.y += s.vy * dt;
-        g.strokeStyle = rgba(a);
-        g.lineWidth = 1.6 * s.r;
+        g.strokeStyle = rgba(0.85 * a);
+        g.lineWidth = 1.2 * s.r;
         g.beginPath();
-        g.moveTo(ox - s.vx * 0.025, oy - s.vy * 0.025);
+        g.moveTo(ox - s.vx * 0.03, oy - s.vy * 0.03);
         g.lineTo(s.x, s.y);
         g.stroke();
-        g.globalAlpha = a;
-        g.drawImage(glowSprite, s.x - 7 * s.r, s.y - 7 * s.r, 14 * s.r, 14 * s.r);
+        g.globalAlpha = 0.6 * a;
+        g.drawImage(glowSprite, s.x - 4 * s.r, s.y - 4 * s.r, 8 * s.r, 8 * s.r);
         g.globalAlpha = 1;
       }
     }
