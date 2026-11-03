@@ -5,11 +5,9 @@
  *   INTRO       "door"  - a door swings open onto an underwater scene, then the site lights up
  *               "power" - the main switch flips on and current lights up the page
  *               "off"   - no intro
- *   STEP_INSIDE true / false - the "Step Inside" section with the four animated doors
- * The owner can override both on their own device from the Customise panel.
+ * The owner can override it on their own device from the Customise panel.
  */
 var INTRO = "off";
-var STEP_INSIDE = true;
 
 (function () {
   var d = document.documentElement,
@@ -26,14 +24,14 @@ var STEP_INSIDE = true;
   if (p.accent) d.style.setProperty("--accent", p.accent);
   if (p.font) d.setAttribute("data-font", p.font);
   if (p.motion === false) d.setAttribute("data-motion", "off");
-  var hide = p.hidden || (STEP_INSIDE ? [] : ["inside"]);
+  var hide = p.hidden || [];
   if (hide.length) d.setAttribute("data-hide", hide.join(" "));
   d.classList.add("js");
   // Intro once per visit (skipped for reduced motion). ?intro=door|power replays one.
   var intro = (p.introPick && p.intro) || INTRO,
     force = /[?&]intro=(door|power)/.exec(location.search);
   if (force) intro = force[1];
-  window.SITE_SWITCHES = { intro: INTRO, stepInside: STEP_INSIDE };
+  window.SITE_SWITCHES = { intro: INTRO };
   try {
     if (
       intro !== "off" &&
