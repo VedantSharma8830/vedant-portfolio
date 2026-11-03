@@ -2632,3 +2632,246 @@ svg circle {
 [data-theme="light"] .field-err {
   color: #c2410c;
 }
+
+/* ---------- scroll motion ---------- */
+.progress {
+  height: 3px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, transparent), var(--accent));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
+  will-change: transform;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+}
+.orb-a {
+  width: 340px;
+  height: 340px;
+  left: -120px;
+  top: 58svh;
+}
+.orb-b {
+  width: 180px;
+  height: 180px;
+  right: 34%;
+  top: 14svh;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 16%, transparent), transparent);
+}
+.mo .hero-art,
+.mo .hero-copy,
+.mo .orb {
+  will-change: transform;
+}
+/* reveal flavours */
+.js .p-stage.reveal {
+  transform: translateY(48px) scale(0.96);
+}
+.js .tl-card.reveal {
+  transform: translateX(44px);
+}
+.js .cta-card.reveal {
+  transform: translateY(36px) scale(0.94);
+}
+.js .door.reveal {
+  transform: translateY(40px) rotate(-1.5deg);
+}
+.js .reveal.in {
+  transform: none;
+}
+.js .p-copy.reveal .p-rows > div,
+.js .p-copy.reveal .p-tags span,
+.js .tl-card.reveal li,
+.js .stats.reveal > div {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+}
+.js .reveal.in .p-rows > div,
+.js .reveal.in .p-tags span,
+.js .tl-card.reveal.in li,
+.js .stats.reveal.in > div {
+  opacity: 1;
+  transform: none;
+}
+.p-tags span:nth-child(2),
+.p-rows > div:nth-child(1),
+.tl-card li:nth-child(1),
+.stats > div:nth-child(2) {
+  transition-delay: 0.12s;
+}
+.p-tags span:nth-child(3),
+.p-rows > div:nth-child(2),
+.tl-card li:nth-child(2),
+.stats > div:nth-child(3) {
+  transition-delay: 0.24s;
+}
+.p-tags span:nth-child(4),
+.p-rows > div:nth-child(3),
+.tl-card li:nth-child(3),
+.stats > div:nth-child(4) {
+  transition-delay: 0.36s;
+}
+/* words rising out of a mask */
+.split .wd {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.06em 0.14em 0;
+  margin: 0 -0.06em -0.14em 0;
+}
+.split .wd > span {
+  display: inline-block;
+  transform: translateY(108%);
+  transition: transform 0.95s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.mo .h2.split.reveal {
+  opacity: 1;
+  transform: none;
+}
+.split.in .wd > span,
+.in .split .wd > span {
+  transform: none;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+/* journey: rail that fills as you read, score bars */
+.mo .timeline::before,
+.mo .timeline::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--line);
+}
+.mo .timeline::after {
+  background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
+  transform-origin: 50% 0;
+  transform: scaleY(var(--tp, 0));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.tl-stage::before {
+  transition: box-shadow 0.8s var(--ease);
+}
+.tl.in .tl-stage::before {
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tl-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 2px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.tl-bar i {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 6px;
+  background: var(--line);
+  overflow: hidden;
+}
+.tl-bar i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 60%, transparent), var(--accent));
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  transition: transform 1.3s var(--ease) 0.25s;
+}
+.js .tl-card.reveal:not(.in) .tl-bar i::after {
+  transform: scaleX(0);
+}
+.tl-bar b {
+  font-weight: 600;
+}
+/* diagrams draw themselves */
+.mo .sch.drw .dw {
+  stroke-dasharray: var(--len) var(--len);
+  stroke-dashoffset: var(--len);
+  fill-opacity: 0;
+  transition:
+    stroke-dashoffset 1.5s var(--ease) calc(var(--i, 0) * 45ms),
+    fill-opacity 0.6s ease calc(var(--i, 0) * 45ms + 0.5s);
+}
+.mo .sch.drw text,
+.mo .sch.drw .dot,
+.mo .sch.drw .pin,
+.mo .sch.drw .arw,
+.mo .sch.drw .ldr-rays,
+.mo .sch.drw .link {
+  transition: opacity 0.7s ease 1.1s;
+}
+.mo .sch.drw:not(.drawn) text,
+.mo .sch.drw:not(.drawn) .dot,
+.mo .sch.drw:not(.drawn) .pin,
+.mo .sch.drw:not(.drawn) .arw,
+.mo .sch.drw:not(.drawn) .ldr-rays,
+.mo .sch.drw:not(.drawn) .link {
+  opacity: 0;
+}
+.mo .sch.drawn .dw {
+  stroke-dashoffset: 0;
+  fill-opacity: 1;
+}
+@media (max-width: 960px) {
+  .mo .timeline::before,
+  .mo .timeline::after {
+    left: -10px;
+  }
+  .orb-a {
+    width: 240px;
+    height: 240px;
+  }
+  .orb-b {
+    right: 6%;
+    top: 34svh;
+  }
+}
+/* still page for reduced motion or when motion is switched off */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal,
+  .js .p-copy.reveal .p-rows > div,
+  .js .p-copy.reveal .p-tags span,
+  .js .tl-card.reveal li,
+  .js .stats.reveal > div,
+  .tl-num span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .js .tl-card.reveal .tl-bar i::after {
+    transform: scaleX(var(--p, 0)) !important;
+    transition: none !important;
+  }
+}
+[data-motion="off"].js .reveal,
+[data-motion="off"].js .p-copy.reveal .p-rows > div,
+[data-motion="off"].js .p-copy.reveal .p-tags span,
+[data-motion="off"].js .tl-card.reveal li,
+[data-motion="off"].js .stats.reveal > div,
+[data-motion="off"] .tl-num span,
+[data-motion="off"] .split .wd > span {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+[data-motion="off"].js .tl-card.reveal .tl-bar i::after {
+  transform: scaleX(var(--p, 0)) !important;
+  transition: none !important;
+}

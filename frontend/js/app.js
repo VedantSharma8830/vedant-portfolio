@@ -219,8 +219,14 @@
             function (es) {
               es.forEach(function (en) {
                 if (en.isIntersecting) {
-                  en.target.classList.add("in");
-                  io.unobserve(en.target);
+                  var t = en.target,
+                    d = +t.getAttribute("data-d") || 0;
+                  io.unobserve(t);
+                  if (d && motionOn())
+                    setTimeout(function () {
+                      t.classList.add("in");
+                    }, d);
+                  else t.classList.add("in");
                 }
               });
             },
@@ -649,7 +655,7 @@
           "</dd></div><div><dt>Result</dt><dd>" +
           esc(p.benefit) +
           "</dd></div></dl></div>" +
-          '<div class="p-stage reveal">' +
+          '<div class="p-stage reveal" data-d="140">' +
           vizCard(p, n) +
           "</div></article>"
         );
@@ -813,6 +819,21 @@
     });
 
     /* ---------- timeline ---------- */
+    // A thin bar that fills to the score (percent, or SGPA out of 10).
+    function scoreBar(e) {
+      var src = /%/.test(e.score) ? e.score : e.big,
+        v = parseFloat(src);
+      if (!(v > 0)) return "";
+      var pct = /%/.test(src) ? v : /sgpa|cgpa/i.test(e.bigLabel) ? v * 10 : 0;
+      if (!pct || pct > 100) return "";
+      return (
+        '<span class="tl-bar" aria-hidden="true"><i style="--p:' +
+        (pct / 100).toFixed(3) +
+        '"></i><b>' +
+        esc(/%/.test(src) ? src.replace(/\s.*$/, "") : v + " / 10") +
+        "</b></span>"
+      );
+    }
     $("#timeline").innerHTML = CV.education
       .map(function (e) {
         return (
@@ -825,7 +846,9 @@
           "</span></div></div>" +
           '<div class="tl-card reveal"><span class="tl-score">' +
           esc(e.score) +
-          "</span><h3>" +
+          "</span>" +
+          scoreBar(e) +
+          "<h3>" +
           esc(e.degree) +
           '</h3><p class="tl-school">' +
           esc(e.school) +
@@ -1109,6 +1132,8 @@
     });
     $$(".reveal").forEach(watch);
     $$(".tl").forEach(watch);
+    root.classList.add("ready");
+    document.dispatchEvent(new CustomEvent("site:ready"));
   }
 
   // Use live data from the backend if it is available, otherwise the bundled data file.

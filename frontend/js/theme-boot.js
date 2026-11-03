@@ -15,4 +15,8 @@
   if (p.font) d.setAttribute("data-font", p.font);
   if (p.motion === false) d.setAttribute("data-motion", "off");
   d.classList.add("js");
+  // If the main script never finishes, show everything rather than leave sections hidden.
+  setTimeout(function () {
+    if (!d.classList.contains("ready")) d.classList.remove("js");
+  }, 4000);
 })();
