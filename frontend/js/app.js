@@ -9,6 +9,9 @@
 
   function start(CV) {
     var DEF = window.SITE_DEFAULTS;
+    var SWX = window.SITE_SWITCHES || {};
+    DEF.intro = SWX.intro || "door";
+    if (SWX.stepInside === false && DEF.hidden.indexOf("inside") < 0) DEF.hidden.push("inside");
     var KEY = "vs-prefs",
       OWN = "vs-owner",
       THEME = "vs-theme";
@@ -942,6 +945,7 @@
       ["marquee", "Ticker"],
       ["doors", "Doors"],
       ["projects", "Projects"],
+      ["inside", "Step Inside"],
       ["journey", "Journey"],
       ["contact", "Contact"],
     ];

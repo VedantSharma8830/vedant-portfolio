@@ -1,7 +1,8 @@
 /*
  * The site's switch-on experience:
- *  1. a power-on intro (once per visit): the breaker closes, current races
- *     out along the traces and the page lights up band by band;
+ *  1. an intro (once per visit), either a door that swings open onto an
+ *     underwater scene and carries you through it, or the breaker closing
+ *     while current races out along the traces and the page lights up;
  *  2. a glowing cursor dot with a trailing ring on desktop;
  *  3. scroll stories for the two projects: dusk falls and a street lamp
  *     switches itself on at the street-light project, and the appliances
@@ -42,13 +43,103 @@
     doc.dispatchEvent(new CustomEvent("power:on", { detail: { x: x, y: y } }));
   }
 
-  /* ---------- 1. power-on intro ---------- */
+  /* ---------- 1a. door intro ---------- */
+  function doorIntro() {
+    try {
+      sessionStorage.setItem("vs-pwr", "1");
+    } catch (e) {}
+    root.classList.add("pwr-run");
+    var bub = "";
+    for (var i = 0; i < 14; i++)
+      bub +=
+        '<i style="left:' +
+        ((i * 37 + 9) % 96) +
+        "%;--s:" +
+        (5 + ((i * 7) % 9)) +
+        "px;animation-delay:" +
+        ((i * 0.17) % 1.3).toFixed(2) +
+        "s;animation-duration:" +
+        (1.8 + ((i * 0.31) % 1.2)).toFixed(2) +
+        's"></i>';
+    var box = el(
+      "div",
+      "dint",
+      '<div class="di-sea"><div class="di-rays"><i></i><i></i><i></i><i></i><i></i></div>' +
+        '<div class="di-whale">' +
+        (win.__vsWhale ? win.__vsWhale() : "") +
+        "</div>" +
+        '<div class="di-bub">' +
+        bub +
+        "</div></div>" +
+        '<div class="di-cam"><div class="di-door">' +
+        '<div class="di-panel"><i class="di-m1"></i><i class="di-m2"></i><b class="di-knob"></b></div>' +
+        '<div class="di-frame"><span class="di-key"></span></div></div>' +
+        '<p class="di-name">Vedant Sharma</p></div>' +
+        '<button type="button" class="pwr-skip">Skip intro</button>',
+    );
+    box.querySelector(".di-sea").setAttribute("aria-hidden", "true");
+    box.querySelector(".di-cam").setAttribute("aria-hidden", "true");
+    doc.body.appendChild(box);
+    root.classList.remove("pwr");
+    var dr = box.querySelector(".di-door").getBoundingClientRect(),
+      vw = win.innerWidth,
+      vh = win.innerHeight,
+      rad = dr.width / 2,
+      cx = dr.left + dr.width / 2,
+      cy = dr.top + dr.height / 2,
+      st = box.style;
+    st.setProperty("--t", dr.top + 4 + "px");
+    st.setProperty("--l", dr.left + 4 + "px");
+    st.setProperty("--r", vw - dr.right + 4 + "px");
+    st.setProperty("--b", vh - dr.bottom + "px");
+    st.setProperty("--rad", rad - 4 + "px");
+    box.style.setProperty("--ox", cx + "px");
+    box.style.setProperty("--oy", cy + "px");
+    void box.offsetWidth;
+    box.classList.add("run");
+    var timers = [],
+      done = false;
+    function later(f, ms) {
+      timers.push(setTimeout(f, ms));
+    }
+    function finish(fast) {
+      if (done) return;
+      done = true;
+      timers.forEach(clearTimeout);
+      powerOn(cx, cy);
+      box.classList.add("out");
+      if (fast) box.classList.add("fast");
+      setTimeout(
+        function () {
+          if (box.parentNode) box.parentNode.removeChild(box);
+          root.classList.remove("pwr-run");
+        },
+        fast ? 320 : 460,
+      );
+      doc.removeEventListener("keydown", skip);
+    }
+    function skip() {
+      finish(true);
+    }
+    later(function () {
+      box.classList.add("go");
+    }, 1650);
+    later(function () {
+      finish(false);
+    }, 2450);
+    box.addEventListener("click", skip);
+    doc.addEventListener("keydown", skip);
+    setTimeout(finish, 3600);
+  }
+
+  /* ---------- 1b. power-on intro ---------- */
   function intro() {
     if (!root.classList.contains("pwr")) return;
     if (still() || !win.requestAnimationFrame) {
       root.classList.remove("pwr");
       return;
     }
+    if (root.getAttribute("data-intro") === "door") return doorIntro();
     try {
       sessionStorage.setItem("vs-pwr", "1");
     } catch (e) {}

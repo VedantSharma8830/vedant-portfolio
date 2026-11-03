@@ -215,9 +215,41 @@
         </div>
       </section>
 
+      <section class="sec inside-sec" id="inside" data-sec="inside" aria-labelledby="insideTitle">
+        <div class="wrap">
+          <p class="kicker reveal">03 · Step Inside</p>
+          <h2 class="h2 reveal" id="insideTitle">Step <em>inside.</em></h2>
+          <p class="lead reveal">
+            Four doors, four little worlds. Tap a door to open it, tap again to close.
+          </p>
+          <div class="sdoors" id="sdoors">
+            <button type="button" class="sdoor" data-scene="whale" aria-pressed="false">
+              <span class="sd-frame"
+                ><span class="sd-in"></span><span class="sd-panel"><i></i><i></i><b></b></span></span
+              ><span class="sd-lbl">The Deep</span>
+            </button>
+            <button type="button" class="sdoor" data-scene="space" aria-pressed="false">
+              <span class="sd-frame"
+                ><span class="sd-in"></span><span class="sd-panel"><i></i><i></i><b></b></span></span
+              ><span class="sd-lbl">Lift-off</span>
+            </button>
+            <button type="button" class="sdoor" data-scene="waves" aria-pressed="false">
+              <span class="sd-frame"
+                ><span class="sd-in"></span><span class="sd-panel"><i></i><i></i><b></b></span></span
+              ><span class="sd-lbl">The Waves</span>
+            </button>
+            <button type="button" class="sdoor" data-scene="jungle" aria-pressed="false">
+              <span class="sd-frame"
+                ><span class="sd-in"></span><span class="sd-panel"><i></i><i></i><b></b></span></span
+              ><span class="sd-lbl">The Jungle</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section class="sec" id="journey" data-sec="journey" aria-labelledby="journeyTitle">
         <div class="wrap">
-          <p class="kicker reveal">03 · Journey</p>
+          <p class="kicker reveal">04 · Journey</p>
           <h2 class="h2 reveal" id="journeyTitle">Let's go <em>back in time.</em></h2>
           <p class="lead reveal">From the lecture hall today back to where it started.</p>
           <ol class="timeline" id="timeline"></ol>
@@ -227,7 +259,7 @@
       <section class="sec contact" id="contact" data-sec="contact" aria-labelledby="contactTitle">
         <div class="wrap">
           <div class="cta-card reveal">
-            <p class="kicker">04 · Contact</p>
+            <p class="kicker">05 · Contact</p>
             <h2 class="cta-title" id="contactTitle">
               Got an opening?<br /><span>Let's build it together.</span>
             </h2>
@@ -379,6 +411,13 @@
         </div>
       </div>
       <div class="panel-sec">
+        <span class="plabel">Opening</span>
+        <div class="seg" data-pref="intro">
+          <button type="button" data-v="door">Door</button><button type="button" data-v="power">Switch</button
+          ><button type="button" data-v="off">Off</button>
+        </div>
+      </div>
+      <div class="panel-sec">
         <span class="plabel">Sections</span>
         <div class="checks" id="secChecks"></div>
       </div>
@@ -390,6 +429,7 @@
     </aside>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <script src="js/scenes.js"></script>
     <script src="js/power.js"></script>
     <script src="js/config.js"></script>
     <script src="js/data.js"></script>
