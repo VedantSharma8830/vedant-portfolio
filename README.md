@@ -2,12 +2,25 @@
 
 My personal portfolio website: who I am, my education, industrial training, projects, skills and a way to contact me.
 
-It has two parts:
+[![CI](https://github.com/VedantSharma8830/vedant-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/VedantSharma8830/vedant-portfolio/actions/workflows/ci.yml)
+![Lighthouse](https://img.shields.io/badge/Lighthouse-100%20%7C%20100%20%7C%20100%20%7C%20100-brightgreen)
+![Node](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-- **Frontend**: the website itself (HTML, CSS and plain JavaScript, no framework). It works on its own as a static site.
-- **Backend**: a small **Node.js + Express** server that serves the site and adds a REST API, a working contact form that saves messages, a visit counter and a password-protected admin inbox. No database server is needed; data is stored in JSON files.
+**Live site: https://vedantsharma8830.github.io/vedant-portfolio/**
 
-![Preview](frontend/assets/img/og.png)
+The contact form on the live site is connected to a real backend: messages are validated, rate limited,
+stored in a database and read in a password-protected admin inbox.
+
+![Desktop view](docs/screenshots/desktop-hero.jpg)
+
+![Project card with circuit view](docs/screenshots/project-circuit.jpg)
+
+<p>
+  <img src="docs/screenshots/mobile.jpg" width="22%" alt="Phone view" />
+  <img src="docs/screenshots/contact-sent.jpg" width="38%" alt="Contact form sent through the live backend" />
+  <img src="docs/screenshots/admin-inbox.jpg" width="37%" alt="Password-protected admin inbox" />
+</p>
 
 ---
 
@@ -16,23 +29,62 @@ It has two parts:
 - Dark / light theme with a sun-moon switch (remembers your choice)
 - Rotating role pill in the hero, smooth scroll reveal animations
 - "Doors" section that opens into About / Skills / Training / Strengths
-- Project showcase with interactive phone demos
+- **Projects with engineering visuals**: a concept circuit schematic for the Automatic Street Light Controller
+  and a system block diagram for Home Automation. Both are animated and linked to an interactive simulation
+  (drag the daylight slider and watch the transistor, relay and lamp switch; turn on Smart mode and watch idle
+  loads drop out)
 - Education timeline
-- Contact section with Email / Call toggle, copy button and a **contact form**
-- Fully responsive (tested at 390 px phone width and desktop)
-- Respects "reduce motion" settings
+- Contact section with Email / Call toggle, copy button and a **working contact form**
+- Footer badge showing the backend is online and the live visit count
+- Fully responsive (tested at 390 px phone width and desktop), keyboard accessible, respects "reduce motion"
 - Owner-only Customise panel (accent colour, font, sections), unlocked with a private link
+- SEO: meta tags, Open Graph preview, structured data (schema.org Person)
 - Backend: REST API, contact form with validation + rate limit + honeypot, admin inbox, visit counter
-- API tests with Node's built-in test runner
+- Two backend versions with the same API: **Express** (run locally or on any Node host) and a
+  **serverless Cloudflare Worker + D1 database** (what the live site uses)
+- API tests with Node's built-in test runner, ESLint + Prettier, CI on every push
+
+## Lighthouse
+
+Measured on the live site (Chrome Lighthouse 13):
+
+|         | Performance | Accessibility | Best Practices | SEO |
+| ------- | :---------: | :-----------: | :------------: | :-: |
+| Mobile  |     100     |      100      |      100       | 100 |
+| Desktop |     100     |      100      |      100       | 100 |
+
+![Lighthouse scores](docs/screenshots/lighthouse.png)
+
+## Architecture
+
+```mermaid
+flowchart LR
+    V[Visitor's browser] -->|HTML, CSS, JS| F[Frontend<br/>index.html + data.js]
+    F -->|fetch /api/*| API{{Backend API}}
+    subgraph Backend [Same API, two ways to run it]
+        API --> E[Express server<br/>backend/]
+        API --> W[Cloudflare Worker<br/>cloudflare/worker.js]
+        E --> J[(JSON files<br/>backend/data)]
+        W --> D[(D1 SQLite database)]
+    end
+    A[Admin] -->|/admin + password| API
+    F -.->|no backend? falls back| M[mailto: / tel:]
+```
+
+- `frontend/js/data.js` is the single source of content. The page reads it directly, and the backend serves
+  the same data at `GET /api/profile`.
+- The frontend never depends on the backend: if the API is not reachable, the contact form opens the
+  visitor's email app with the message already filled in.
 
 ## Tech stack
 
-| Part     | Tech                                              |
-| -------- | ------------------------------------------------- |
-| Frontend | HTML5, CSS3 (custom properties, grid), vanilla JS |
-| Backend  | Node.js, Express 4, dotenv                        |
-| Storage  | JSON files in `backend/data/`                     |
-| Tooling  | nodemon, ESLint, Prettier, Node test runner       |
+| Part       | Tech                                                          |
+| ---------- | ------------------------------------------------------------- |
+| Frontend   | HTML5, CSS3 (custom properties, grid), vanilla JS, inline SVG |
+| Backend    | Node.js, Express 4, dotenv                                    |
+| Serverless | Cloudflare Workers, D1 (SQLite), Web Crypto (HMAC sessions)   |
+| Storage    | JSON files (Express) or D1 (Worker)                           |
+| Tooling    | nodemon, ESLint, Prettier, Node test runner, GitHub Actions   |
 
 ---
 
@@ -104,13 +156,15 @@ with the message filled in instead.
 
 ## Available scripts
 
-| Command          | What it does                                 |
-| ---------------- | -------------------------------------------- |
-| `npm start`      | Start the server on <http://localhost:3000>  |
-| `npm run dev`    | Start with nodemon (auto-restart on changes) |
-| `npm test`       | Run the API tests                            |
-| `npm run lint`   | Check the code with ESLint                   |
-| `npm run format` | Format all files with Prettier               |
+| Command                 | What it does                                 |
+| ----------------------- | -------------------------------------------- |
+| `npm start`             | Start the server on <http://localhost:3000>  |
+| `npm run dev`           | Start with nodemon (auto-restart on changes) |
+| `npm test`              | Run the API tests                            |
+| `npm run lint`          | Check the code with ESLint                   |
+| `npm run format`        | Format all files with Prettier               |
+| `npm run build:worker`  | Prepare the Cloudflare Worker (profile JSON) |
+| `npm run deploy:worker` | Build and deploy the Worker with Wrangler    |
 
 ## Debugging in VS Code
 
@@ -156,10 +210,16 @@ vedant-portfolio/
 │   ├── data/                 # messages.json + stats.json are created here
 │   └── tests/
 │       └── api.test.js
+├── cloudflare/
+│   ├── worker.js             # serverless version of the same API (Workers + D1)
+│   └── schema.sql            # database tables
 ├── scripts/
-│   └── ensure-env.js         # creates .env on first start
+│   ├── ensure-env.js         # creates .env on first start
+│   └── build-worker.js       # turns data.js into JSON for the Worker
+├── docs/screenshots/         # images used in this README
 ├── .vscode/                  # recommended extensions, debug config
-├── .github/workflows/        # GitHub Pages deploy for the frontend
+├── .github/workflows/        # CI (lint + tests) and GitHub Pages deploy
+├── wrangler.toml             # Cloudflare Workers settings
 ├── .env.example
 ├── package.json
 └── README.md
@@ -264,7 +324,9 @@ The repo includes a workflow (`.github/workflows/pages.yml`) that publishes the 
 2. On GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 3. Every push to `main` deploys the site to `https://<your-username>.github.io/vedant-portfolio/`.
 
-On GitHub Pages the contact form uses the email fallback (no server there).
+On GitHub Pages the contact form uses the email fallback, unless you point it at a deployed backend:
+add a repository variable **API_BASE** (Settings → Secrets and variables → Actions → Variables) with the
+backend URL, and the workflow writes it into `frontend/js/config.js` during the deploy.
 
 ### Option B: Full stack on Render (free tier)
 
@@ -288,6 +350,22 @@ On GitHub Pages the contact form uses the email fallback (no server there).
 > **Note on free tiers:** free servers go to sleep when idle (the first visit takes a few seconds), and their
 > disk is reset on every redeploy, so `messages.json` doesn't survive a redeploy. Read your messages in `/admin`
 > regularly; for permanent storage, attach a persistent disk and point `DATA_DIR` at it.
+
+### Option D: Full stack on Cloudflare Workers + D1 (free, no sleeping)
+
+This is how the live site runs. The Worker serves the frontend and the same API as the Express server,
+with messages stored in a D1 (SQLite) database, so nothing is lost on redeploy and there is no cold start.
+
+```bash
+npx wrangler login
+npx wrangler d1 create portfolio-db          # copy the database_id into wrangler.toml
+npx wrangler secret put ADMIN_PASSWORD       # choose a strong password
+npm run deploy:worker
+```
+
+The tables are created automatically on the first request (or run
+`npx wrangler d1 execute portfolio-db --remote --file=cloudflare/schema.sql`).
+To use it with the GitHub Pages copy too, set `CORS_ORIGIN` in `wrangler.toml` to your Pages origin.
 
 ### Frontend on GitHub Pages + backend on Render
 
