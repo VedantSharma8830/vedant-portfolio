@@ -405,11 +405,32 @@
       roomClose = $("#roomClose"),
       roomScene = $("#roomScene");
     var opener = null,
-      busy = false;
-    function clipFrom(door) {
+      phase = "closed",
+      timers = [],
+      ownEntry = false,
+      keepY = 0,
+      row = $("#doorsRow");
+    function later(fn, ms) {
+      timers.push(setTimeout(fn, ms));
+    }
+    function clearTimers() {
+      timers.forEach(clearTimeout);
+      timers = [];
+    }
+    function clipFrom(door, unzoomed) {
+      var zoomed = unzoomed && row.classList.contains("zoom");
+      if (zoomed) {
+        row.style.transition = "none";
+        row.classList.remove("zoom");
+      }
       var f = $(".door-inside", door).getBoundingClientRect(),
         w = f.width,
         h = f.height;
+      if (zoomed) {
+        row.classList.add("zoom");
+        void row.offsetWidth;
+        row.style.transition = "";
+      }
       room.style.setProperty("--t", Math.max(0, f.top) + "px");
       room.style.setProperty("--l", Math.max(0, f.left) + "px");
       room.style.setProperty("--r", Math.max(0, innerWidth - f.right) + "px");
@@ -436,20 +457,34 @@
       roomIn.scrollTop = 0;
     }
     function openRoom(n, door) {
-      if (busy) return;
-      busy = true;
+      if (phase !== "closed") return;
+      clearTimers();
+      phase = "opening";
       opener = door;
+      keepY = window.scrollY;
       var anim = motionOn();
+      room.classList.remove("closing");
+      row.classList.remove("closing");
       door.classList.add("opening");
+      // history entry right away (inside the tap) so the phone's back always lands on it
+      try {
+        if (history.state && history.state.room !== undefined) {
+          history.replaceState({ room: n }, "", "#" + ROOMS[n].id);
+        } else {
+          history.pushState({ room: n }, "", "#" + ROOMS[n].id);
+        }
+        ownEntry = true;
+      } catch (e) {
+        ownEntry = false;
+      }
       if (anim) {
-        var row = $("#doorsRow"),
-          rr = row.getBoundingClientRect(),
+        var rr = row.getBoundingClientRect(),
           dr = $(".door-inside", door).getBoundingClientRect();
         row.style.transformOrigin =
           dr.left + dr.width / 2 - rr.left + "px " + (dr.top + dr.height * 0.45 - rr.top) + "px";
         row.classList.add("zoom");
       }
-      setTimeout(
+      later(
         function () {
           fill(n);
           clipFrom(door);
@@ -459,44 +494,58 @@
           void room.offsetWidth;
           room.classList.add("open");
           var done = function () {
+            if (phase !== "opening") return;
+            phase = "open";
             room.classList.add("ready");
             roomClose.focus({ preventScroll: true });
-            busy = false;
           };
-          if (anim) setTimeout(done, 700);
+          if (anim) later(done, 700);
           else done();
-          try {
-            history.pushState({ room: n }, "", "#" + ROOMS[n].id);
-          } catch (e) {}
         },
         anim ? 380 : 0,
       );
     }
+    function finishClose() {
+      if (phase !== "closing") return;
+      clearTimers();
+      phase = "closed";
+      room.hidden = true;
+      room.classList.remove("open", "ready", "closing");
+      row.classList.remove("closing");
+      document.body.classList.remove("locked");
+      if (Math.abs(window.scrollY - keepY) > 2) window.scrollTo({ top: keepY, behavior: "instant" });
+      if (opener) opener.focus({ preventScroll: true });
+    }
     function closeRoom(fromPop) {
-      if (room.hidden || busy) return;
-      busy = true;
-      var anim = motionOn();
-      room.classList.remove("ready");
-      if (opener) clipFrom(opener);
-      room.classList.remove("open");
-      setTimeout(
-        function () {
-          room.hidden = true;
-          document.body.classList.remove("locked");
-          $("#doorsRow").classList.remove("zoom");
-          if (opener) {
-            opener.classList.remove("opening");
-            opener.focus({ preventScroll: true });
-          }
-          busy = false;
-        },
-        anim ? 760 : 0,
-      );
-      if (!fromPop) {
+      if (phase === "closed" || phase === "closing") return;
+      clearTimers();
+      var wasShown = !room.hidden,
+        anim = motionOn() && wasShown;
+      phase = "closing";
+      // everything reverses at once: room shrinks back into the door, the row zooms out,
+      // the door swings shut (about 0.45 s in total)
+      if (anim && opener) clipFrom(opener, true);
+      room.classList.add("closing");
+      row.classList.add("closing");
+      room.classList.remove("ready", "open");
+      row.classList.remove("zoom");
+      if (opener) opener.classList.remove("opening");
+      if (!fromPop && ownEntry) {
         try {
           if (history.state && history.state.room !== undefined) history.back();
         } catch (e) {}
       }
+      ownEntry = false;
+      if (anim) {
+        var onEnd = function (e) {
+          if (e.target === room && e.propertyName === "opacity") {
+            room.removeEventListener("transitionend", onEnd);
+            finishClose();
+          }
+        };
+        room.addEventListener("transitionend", onEnd);
+        later(finishClose, 480); // hard fallback: close always completes
+      } else finishClose();
     }
     $$(".door").forEach(function (d) {
       d.addEventListener("click", function () {
@@ -510,9 +559,11 @@
       var b = e.target.closest("[data-go]");
       if (!b) return;
       var n = +b.getAttribute("data-go");
+      if (phase !== "open") return;
       room.classList.remove("ready");
-      setTimeout(
+      later(
         function () {
+          if (phase !== "open") return;
           if (opener) opener.classList.remove("opening");
           opener = $('.door[data-room="' + n + '"]');
           opener.classList.add("opening");
@@ -527,7 +578,7 @@
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
-        if (!room.hidden) closeRoom(false);
+        if (phase === "opening" || phase === "open") closeRoom(false);
         else if (panel.classList.contains("open")) closePanel();
       }
       if (e.key === "Tab" && !room.hidden) {
@@ -544,7 +595,7 @@
       }
     });
     window.addEventListener("popstate", function () {
-      if (!room.hidden) closeRoom(true);
+      if (phase === "opening" || phase === "open") closeRoom(true);
     });
     (function deepLink() {
       var h = location.hash.replace("#", ""),

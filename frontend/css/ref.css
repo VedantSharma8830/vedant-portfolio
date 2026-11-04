@@ -612,12 +612,17 @@ body::before {
   background: linear-gradient(#3a3129, #1c1814);
   box-shadow: 0 1px 0 rgba(226, 181, 76, 0.35);
 }
-.door:hover .door-panel,
 .door:focus-visible .door-panel {
   transform: rotateY(-38deg);
 }
-.door:hover .door-light {
-  opacity: 1;
+@media (hover: hover) {
+  .door:hover .door-panel {
+    transform: rotateY(-38deg);
+  }
+  .door:hover .door-light,
+  .door:hover::after {
+    opacity: 1;
+  }
 }
 .door.opening .door-panel {
   transform: rotateY(-112deg);
@@ -638,7 +643,6 @@ body::before {
   transition: opacity 0.6s;
   pointer-events: none;
 }
-.door:hover::after,
 .door.opening::after {
   opacity: 1;
 }
@@ -753,6 +757,7 @@ body::before {
 }
 .room-close:hover {
   background: #fff;
+  transform: none;
 }
 .room-title {
   font-weight: 800;
@@ -1233,6 +1238,36 @@ body::before {
   .btn-dark {
     padding-left: 20px;
   }
+}
+
+/* ---------- closing a room: everything reverses together, fast ---------- */
+.room.closing {
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    clip-path 0.4s cubic-bezier(0.5, 0, 0.2, 1),
+    opacity 0.18s ease 0.24s;
+}
+.room.closing .room-in {
+  transition-duration: 0.12s;
+}
+.doors.closing {
+  transition:
+    transform 0.45s cubic-bezier(0.3, 0, 0.2, 1),
+    opacity 0.45s;
+}
+.doors.closing .door-panel {
+  transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1) 0.04s;
+}
+.doors.closing .door,
+.doors.closing .door-light,
+.doors.closing .door::after {
+  transition-duration: 0.3s;
+}
+.doors-sec:has(.doors.closing) .kicker,
+.doors-sec:has(.doors.closing) .h2,
+.doors-sec:has(.doors.closing) .lead {
+  transition-duration: 0.3s;
 }
 
 /* ---------- reduced motion / animations off ---------- */
