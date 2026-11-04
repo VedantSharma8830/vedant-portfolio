@@ -153,7 +153,7 @@ window.CV = {
 
 // Default look of the site (the owner can change these on their own device via the Customise panel)
 window.SITE_DEFAULTS = {
-  theme: "dark",
+  theme: "light",
   accent: "#ffd23f",
   font: "grotesk",
   motion: true,

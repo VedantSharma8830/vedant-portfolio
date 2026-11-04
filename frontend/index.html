@@ -22,12 +22,13 @@
     <link rel="preload" href="assets/fonts/display.woff2" as="font" type="font/woff2" crossorigin />
     <link
       rel="preload"
-      href="assets/img/avatar.webp"
+      href="assets/img/portrait.webp"
       as="image"
-      imagesrcset="assets/img/avatar-360.webp 360w, assets/img/avatar.webp 540w"
-      imagesizes="(max-width: 960px) 180px, 330px"
+      imagesrcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
+      imagesizes="(max-width: 960px) 80vw, 470px"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=r3" />
+    <link rel="stylesheet" href="css/ref.css?v=r3" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -51,7 +52,7 @@
       }
     </script>
 
-    <script src="js/theme-boot.js"></script>
+    <script src="js/theme-boot.js?v=r3"></script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -68,25 +69,9 @@
           <a href="#contact" data-k="contact">Contact</a>
         </nav>
         <div class="nav-actions">
-          <button
-            class="theme-switch"
-            id="themeSwitch"
-            type="button"
-            aria-label="Switch to light theme"
-            aria-pressed="false"
+          <span class="clock" id="clock" aria-label="Local time in India"
+            ><i aria-hidden="true"></i><span id="clockT">IST</span></span
           >
-            <span class="ts-knob" aria-hidden="true">
-              <svg class="i-sun" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="4.2" />
-                <path
-                  d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"
-                />
-              </svg>
-              <svg class="i-moon" viewBox="0 0 24 24">
-                <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
-              </svg>
-            </span>
-          </button>
           <a
             class="btn btn-sm btn-accent nav-cv magnetic"
             href="assets/docs/Vedant_Sharma_CV.pdf"
@@ -118,8 +103,16 @@
 
     <main id="main">
       <section class="hero" id="top" data-sec="hero">
-        <div class="orb orb-a" aria-hidden="true"></div>
-        <div class="orb orb-b" aria-hidden="true"></div>
+        <button
+          class="lamp"
+          id="themeSwitch"
+          type="button"
+          aria-label="Turn the lights off"
+          aria-pressed="true"
+        >
+          <span class="lamp-cord" aria-hidden="true"></span><span class="lamp-pull" aria-hidden="true"></span>
+          <span class="lamp-tip" aria-hidden="true">Pull</span>
+        </button>
         <div class="hero-grid wrap">
           <div class="hero-copy">
             <p class="eyebrow reveal">
@@ -131,7 +124,7 @@
               <span class="line reveal">I am a</span>
               <span class="line reveal"
                 ><span class="pill-wrap"
-                  ><span class="pill" id="rolePill"
+                  ><span class="pill note" id="rolePill"
                     ><span class="pill-txt" id="roleTxt">future Electrical Engineer</span></span
                   ></span
                 ></span
@@ -142,39 +135,42 @@
               automation and saving power.
             </p>
             <div class="hero-cta reveal">
-              <a
-                class="btn btn-accent magnetic"
-                href="assets/docs/Vedant_Sharma_CV.pdf"
-                data-cv
-                target="_blank"
-                rel="noopener"
-                >Download CV
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14" /></svg
+              <a class="btn btn-dark magnetic" href="#contact"
+                >Let's talk
+                <span class="arr-c"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14m0 0l-6-6m6 6l-6 6" /></svg></span
               ></a>
-              <a class="btn btn-ghost magnetic" href="#contact"
-                >Say hello
+              <a class="btn-link" href="#projects"
+                >See my work
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" /></svg
               ></a>
             </div>
             <dl class="stats reveal" id="stats"></dl>
           </div>
-          <div class="hero-art" aria-hidden="false">
-            <div class="art-ring" aria-hidden="true"></div>
-            <div class="avatar">
-              <div class="art-disc" aria-hidden="true"></div>
+          <div class="hero-art">
+            <div class="art-disc" aria-hidden="true"></div>
+            <button
+              class="photo-btn"
+              id="photoBtn"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="cardx"
+              aria-label="Open Vedant's profile card"
+            >
               <img
                 class="portrait"
                 id="portrait"
-                src="assets/img/avatar.webp"
-                srcset="assets/img/avatar-360.webp 360w, assets/img/avatar.webp 540w"
-                sizes="(max-width: 960px) 180px, 330px"
-                width="540"
-                height="540"
+                src="assets/img/portrait.webp"
+                srcset="assets/img/portrait-480.webp 480w, assets/img/portrait.webp 720w"
+                sizes="(max-width: 960px) 80vw, 470px"
+                width="720"
+                height="960"
                 alt="Portrait of Vedant J. Sharma"
                 fetchpriority="high"
               />
-            </div>
+            </button>
+            <span class="tap-hint" aria-hidden="true"><i></i>Tap my photo</span>
             <div class="chip chip-a" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg
               ><span>Electrical Engg.</span>
@@ -187,7 +183,9 @@
             </div>
           </div>
         </div>
-        <a class="scroll-cue" href="#doors" aria-label="Scroll to the next section"><span></span></a>
+        <div class="hero-base wrap" aria-hidden="true">
+          <span><i class="dot"></i>Available for internships</span><span>SSGMCE · Shegaon</span>
+        </div>
       </section>
 
       <div class="marquee" data-sec="marquee" aria-hidden="true">
@@ -198,7 +196,7 @@
         <div class="wrap">
           <p class="kicker reveal">01 · About</p>
           <h2 class="h2 reveal" id="doorsTitle">Magic happens <em>behind the doors.</em></h2>
-          <p class="lead reveal">Pick a door. Each one opens into a part of my story.</p>
+          <p class="lead reveal">Pick a door and step inside. Each one opens into a part of my story.</p>
           <div class="doors" id="doorsRow"></div>
         </div>
       </section>
@@ -228,6 +226,7 @@
         <div class="wrap">
           <div class="cta-card reveal">
             <p class="kicker">04 · Contact</p>
+            <p class="cta-eyebrow"><span class="dot" aria-hidden="true"></span>Available for new work</p>
             <h2 class="cta-title" id="contactTitle">
               Got an opening?<br /><span>Let's build it together.</span>
             </h2>
@@ -326,8 +325,9 @@
     <div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="roomTitle" hidden>
       <div class="room-scene" id="roomScene"></div>
       <div class="room-in">
-        <button class="room-close" id="roomClose" type="button" aria-label="Close and go back">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        <button class="room-close" id="roomClose" type="button" aria-label="Back to the doors">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" /></svg
+          ><span>Back to the doors</span>
         </button>
         <div class="room-body" id="roomBody"></div>
       </div>
@@ -396,18 +396,129 @@
       </div>
       <p class="saved" id="savedNote">Saved on this device</p>
     </aside>
+
+    <div class="cardx" id="cardx" role="dialog" aria-modal="true" aria-label="Vedant's profile card" hidden>
+      <canvas class="cardx-sky" id="cardSky" aria-hidden="true"></canvas>
+      <button class="cardx-close" id="cardClose" type="button" aria-label="Close the card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <div class="cardx-stage">
+        <div class="pc-fly" id="pcFly">
+          <div class="pc-float">
+            <div
+              class="pcard"
+              id="pcard"
+              role="button"
+              tabindex="0"
+              aria-label="Flip the card"
+              aria-pressed="false"
+            >
+              <div class="pcard-in" id="pcardIn">
+                <div class="pc-face pc-front">
+                  <div class="pc-top">
+                    <span class="pc-rate"><b>7.18</b><small>SGPA</small></span>
+                    <span class="pc-bolt" aria-hidden="true"
+                      ><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg
+                    ></span>
+                    <span class="pc-pos">EE</span>
+                  </div>
+                  <div class="pc-photo">
+                    <img
+                      src="assets/img/portrait-480.webp"
+                      width="480"
+                      height="640"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div class="pc-banner">
+                    <b>Vedant J. Sharma</b><small>Electrical Engineering Student</small>
+                  </div>
+                  <dl class="pc-stats">
+                    <div>
+                      <dt>Branch</dt>
+                      <dd>Electrical (E&amp;P)</dd>
+                    </div>
+                    <div>
+                      <dt>College</dt>
+                      <dd>SSGMCE, Shegaon</dd>
+                    </div>
+                    <div>
+                      <dt>Year</dt>
+                      <dd>3rd Year B.E.</dd>
+                    </div>
+                    <div>
+                      <dt>Projects</dt>
+                      <dd>2</dd>
+                    </div>
+                    <div>
+                      <dt>Training</dt>
+                      <dd>4 weeks</dd>
+                    </div>
+                    <div>
+                      <dt>Skills</dt>
+                      <dd>Machines · Control · MATLAB</dd>
+                    </div>
+                  </dl>
+                </div>
+                <div class="pc-face pc-back" aria-hidden="true">
+                  <div class="pc-emblem">
+                    <svg viewBox="0 0 200 200" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="pcg" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0" stop-color="#fff1b8" />
+                          <stop offset=".35" stop-color="#e2b54c" />
+                          <stop offset=".7" stop-color="#a87a1f" />
+                          <stop offset="1" stop-color="#f3d27a" />
+                        </linearGradient>
+                        <path id="pcring" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1-148 0" />
+                      </defs>
+                      <circle cx="100" cy="100" r="96" fill="none" stroke="url(#pcg)" stroke-width="4" />
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="88"
+                        fill="none"
+                        stroke="url(#pcg)"
+                        stroke-width="1.5"
+                        stroke-dasharray="2 5"
+                      />
+                      <circle cx="100" cy="100" r="60" fill="none" stroke="url(#pcg)" stroke-width="2.5" />
+                      <text
+                        font-size="13"
+                        font-weight="700"
+                        fill="url(#pcg)"
+                        textLength="452"
+                        lengthAdjust="spacing"
+                      >
+                        <textPath href="#pcring">ELECTRICAL ENGINEERING · SSGMCE SHEGAON ·</textPath>
+                      </text>
+                      <path d="M106 58L78 106h20l-6 36 30-50h-21z" fill="url(#pcg)" />
+                    </svg>
+                  </div>
+                  <p class="pc-back-name">Vedant J. Sharma</p>
+                  <p class="pc-back-sub">B.E. Electrical · 3rd Year</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cardx-hint">Tap the card to flip it</p>
+      </div>
+    </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="js/scenes.js"></script>
-    <script src="js/power.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/motion.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/contact.js"></script>
-    <script src="js/circuit.js" defer></script>
-    <script src="js/hero3d.js" defer></script>
-    <script src="js/rooms.js" defer></script>
+    <script src="js/scenes.js?v=r3"></script>
+    <script src="js/power.js?v=r3"></script>
+    <script src="js/config.js?v=r3"></script>
+    <script src="js/data.js?v=r3"></script>
+    <script src="js/api.js?v=r3"></script>
+    <script src="js/motion.js?v=r3"></script>
+    <script src="js/app.js?v=r3"></script>
+    <script src="js/contact.js?v=r3"></script>
+    <script src="js/ref.js?v=r3" defer></script>
+    <script src="js/card.js?v=r3" defer></script>
+    <script src="js/rooms.js?v=r3" defer></script>
   </body>
 </html>

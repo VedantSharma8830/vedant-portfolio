@@ -26,9 +26,10 @@ stored in a database and read in a password-protected admin inbox.
 
 ## Features
 
-- Dark / light theme with a sun-moon switch (remembers your choice)
-- Rotating role pill in the hero, smooth scroll reveal animations
-- "Doors" section that opens into About / Skills / Training / Strengths, each an animated panel (deep sea, space, sunset waves, jungle) with animated icons
+- Light hero with a big cut-out portrait and a hanging lamp cord: pull it to switch the lights (remembers your choice)
+- Tap the portrait: a gold-framed profile card flies out over a starry sky, spins in, floats and flips in 3D to its emblem side (tap to flip, drag to tilt)
+- Rotating role on a ring-bound note, local time in the nav, smooth scroll reveal animations
+- "Doors" section with arched doors and gold nameplates: hover to peek, click to swing a door open and zoom through it into About / Electrical Core / Hands-on Training / Strengths, each an animated panel (deep sea, space, sunset waves, jungle) with animated icons
 - **Projects with engineering visuals**: a concept circuit schematic for the Automatic Street Light Controller
   and a system block diagram for Home Automation. Both are animated and linked to an interactive simulation
   (drag the daylight slider and watch the transistor, relay and lamp switch; turn on Smart mode and watch idle

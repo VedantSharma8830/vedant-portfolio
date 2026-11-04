@@ -13,11 +13,21 @@ var INTRO = "off";
   var d = document.documentElement,
     p = {};
   try {
+    // New design (light hero, lamp cord): start everyone once on the lights-on look.
+    if (localStorage.getItem("vs-rv") !== "2") {
+      localStorage.removeItem("vs-theme");
+      var sp = JSON.parse(localStorage.getItem("vs-prefs") || "null");
+      if (sp && sp.theme) {
+        delete sp.theme;
+        localStorage.setItem("vs-prefs", JSON.stringify(sp));
+      }
+      localStorage.setItem("vs-rv", "2");
+    }
     if (localStorage.getItem("vs-owner") === "1") p = JSON.parse(localStorage.getItem("vs-prefs") || "{}");
     var t = localStorage.getItem("vs-theme");
     if (t && !p.theme) p.theme = t;
   } catch (e) {}
-  var th = p.theme || "dark";
+  var th = p.theme || "light";
   if (th === "auto")
     th = window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
   d.setAttribute("data-theme", th);

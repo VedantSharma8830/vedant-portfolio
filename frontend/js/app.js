@@ -196,8 +196,8 @@
     function syncThemeUI() {
       var light = root.getAttribute("data-theme") === "light";
       themeBtn.setAttribute("aria-pressed", light ? "true" : "false");
-      themeBtn.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
-      if (metaTheme) metaTheme.setAttribute("content", light ? "#f3efe6" : "#0c0c10");
+      themeBtn.setAttribute("aria-label", light ? "Turn the lights off" : "Turn the lights on");
+      if (metaTheme) metaTheme.setAttribute("content", light ? "#e8e7e3" : "#0c0c10");
     }
     themeBtn.addEventListener("click", function () {
       var nt = root.getAttribute("data-theme") === "light" ? "dark" : "light";
@@ -247,6 +247,7 @@
         name: "About me",
         color: "var(--door-1)",
         peek: "Objective, summary and what I'm into",
+        bullets: ["Who I am", "What I'm looking for", "Interests & languages"],
         build: function () {
           return (
             '<p class="room-kicker">Door 01</p><h2 class="room-title" id="roomTitle">About me</h2>' +
@@ -281,12 +282,18 @@
       },
       {
         id: "skills",
-        name: "Skills",
+        name: "Electrical Core",
         color: "var(--door-2)",
         peek: "Core subjects, practical work, software",
+        bullets: [
+          "Electrical machines",
+          "Control systems",
+          "Measurements & instrumentation",
+          "MATLAB (basic)",
+        ],
         build: function () {
           return (
-            '<p class="room-kicker">Door 02</p><h2 class="room-title" id="roomTitle">Skills</h2>' +
+            '<p class="room-kicker">Door 02</p><h2 class="room-title" id="roomTitle">Electrical Core</h2>' +
             '<p class="room-lead">The fundamentals I study, the work I have done with my hands, and the tools I use.</p>' +
             '<div class="room-grid">' +
             CV.skills
@@ -310,9 +317,10 @@
       },
       {
         id: "training",
-        name: "Training",
+        name: "Hands-on Training",
         color: "var(--door-3)",
         peek: "4 weeks of transformer repair",
+        bullets: ["4 weeks, transformer repair", "Fault inspection & testing", "Workshop safety discipline"],
         build: function () {
           return CV.experience
             .map(function (x) {
@@ -342,6 +350,7 @@
         name: "Strengths",
         color: "var(--door-4)",
         peek: "How I work with people",
+        bullets: ["Problem-solving", "Teamwork & communication", "Time management", "Adaptability"],
         build: function () {
           return (
             '<p class="room-kicker">Door 04</p><h2 class="room-title" id="roomTitle">Strengths</h2>' +
@@ -365,8 +374,21 @@
         r.color +
         ";transition-delay:" +
         n * 0.08 +
-        's" aria-haspopup="dialog">' +
-        '<span class="door-frame"><span class="door-inside"></span><span class="door-panel"><span class="inset a"></span><span class="inset b"></span><span class="knob"></span></span><span class="door-step"></span></span>' +
+        's" aria-haspopup="dialog" aria-label="Open the ' +
+        esc(r.name) +
+        ' door">' +
+        '<span class="door-tip" aria-hidden="true"><b>' +
+        esc(r.name) +
+        '</b><span class="tip-list">' +
+        (r.bullets || [])
+          .map(function (b) {
+            return "<i>" + esc(b) + "</i>";
+          })
+          .join("") +
+        '</span><span class="tip-pill">Click to open</span></span>' +
+        '<span class="door-frame"><span class="door-inside"><span class="door-light"></span></span><span class="door-panel"><span class="inset a"></span><span class="inset b"></span><span class="plate">' +
+        esc(r.name) +
+        '</span><span class="knob"></span></span><span class="door-step"></span></span>' +
         '<span class="door-meta"><span class="door-num">0' +
         (n + 1) +
         '</span><span class="door-name">' +
@@ -377,7 +399,6 @@
         "</span></span></button>"
       );
     }).join("");
-
     var room = $("#room"),
       roomBody = $("#roomBody"),
       roomIn = $(".room-in", room),
@@ -420,6 +441,14 @@
       opener = door;
       var anim = motionOn();
       door.classList.add("opening");
+      if (anim) {
+        var row = $("#doorsRow"),
+          rr = row.getBoundingClientRect(),
+          dr = $(".door-inside", door).getBoundingClientRect();
+        row.style.transformOrigin =
+          dr.left + dr.width / 2 - rr.left + "px " + (dr.top + dr.height * 0.45 - rr.top) + "px";
+        row.classList.add("zoom");
+      }
       setTimeout(
         function () {
           fill(n);
@@ -454,6 +483,7 @@
         function () {
           room.hidden = true;
           document.body.classList.remove("locked");
+          $("#doorsRow").classList.remove("zoom");
           if (opener) {
             opener.classList.remove("opening");
             opener.focus({ preventScroll: true });
@@ -940,7 +970,7 @@
         var x = e.clientX / innerWidth - 0.5,
           y = e.clientY / innerHeight - 0.5;
         por.style.transform = "translate(" + x * 14 + "px," + y * 10 + "px)";
-        disc.style.transform = "translate(" + x * -22 + "px," + y * -16 + "px)";
+        if (disc) disc.style.transform = "translate(" + x * -22 + "px," + y * -16 + "px)";
       });
     }
 
