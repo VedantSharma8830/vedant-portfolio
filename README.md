@@ -9,6 +9,8 @@ My personal portfolio website: who I am, my education, industrial training, proj
 
 **Live site: https://vedantsharma8830.github.io/vedant-portfolio/**
 
+The previous look is kept on the `r4-electrical` branch and tag.
+
 The contact form on the live site is connected to a real backend: messages are validated, rate limited,
 stored in a database and read in a password-protected admin inbox.
 
@@ -26,19 +28,15 @@ stored in a database and read in a password-protected admin inbox.
 
 ## Features
 
-- Light hero with a big cut-out portrait and a hanging lamp cord: pull it to switch the lights (remembers your choice)
-- Tap the portrait: a gold-framed profile card flies out over a starry sky, spins in, floats and flips in 3D to its emblem side (tap to flip, drag to tilt)
-- Rotating role on a ring-bound note, local time in the nav, smooth scroll reveal animations
-- "Doors" section with arched doors and gold nameplates: hover to peek, click to swing a door open and zoom through it into About / Electrical Core / Hands-on Training / Strengths, each an animated panel (deep sea, space, sunset waves, jungle) with animated icons
-- **Projects with engineering visuals**: a concept circuit schematic for the Automatic Street Light Controller
-  and a system block diagram for Home Automation. Both are animated and linked to an interactive simulation
-  (drag the daylight slider and watch the transistor, relay and lamp switch; turn on Smart mode and watch idle
-  loads drop out)
-- Education timeline
-- Contact section with Email / Call toggle, copy button and a **working contact form**
+- Black and red look: huge condensed headings with one word in red, a slim top bar, numbered sections (Work, About, How I work, Journey, Contact)
+- Hero with a cut-out portrait, rotating role line, animated stat counters and a skills ticker
+- **Selected work as cards** with filter tabs: each project has a diagram drawn in code (a day/night street lamp circuit and an AI home hub), and opens a detail sheet
+- Numbered Expertise & Skills rows, a red statement panel, a numbered "How I work" list and a Journey timeline (education plus industrial training)
+- Cursor sparkles on desktop, tap sparkles on phones, scroll reveals, progress bar (all switch off with "reduce motion" or from the Customise panel)
+- Contact section with email, phone, CV download and a **working contact form**
 - Footer badge showing the backend is online and the live visit count
 - Fully responsive (tested at 390 px phone width and desktop), keyboard accessible, respects "reduce motion"
-- Owner-only Customise panel (accent colour, font, sections), unlocked with a private link
+- Owner-only Customise panel (accent colour, motion, sections), unlocked with a private link
 - SEO: meta tags, Open Graph preview, structured data (schema.org Person)
 - Backend: REST API, contact form with validation + rate limit + honeypot, admin inbox, visit counter
 - Two backend versions with the same API: **Express** (run locally or on any Node host) and a
@@ -184,14 +182,13 @@ vedant-portfolio/
 ├── frontend/                 # the website (works as a static site on its own)
 │   ├── index.html
 │   ├── css/
-│   │   └── style.css
+│   │   └── site.css
 │   ├── js/
 │   │   ├── data.js           # ALL portfolio content lives here
 │   │   ├── config.js         # API settings for the frontend
 │   │   ├── api.js            # small wrapper around the backend API
-│   │   ├── app.js            # UI: hero, theme, doors, projects, timeline, customise panel
-│   │   ├── contact.js        # contact form logic (API or email fallback)
-│   │   └── theme-boot.js     # applies the saved theme before the page paints
+│   │   ├── site.js           # UI: content render, reveals, sparkles, projects dialog, customise panel
+│   │   └── contact.js        # contact form logic (API or email fallback)
 │   └── assets/
 │       ├── img/              # portrait, favicon, social preview image
 │       ├── fonts/

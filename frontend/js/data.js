@@ -19,10 +19,10 @@ window.CV = {
   roles: ["future Electrical Engineer", "automation enthusiast", "problem solver", "hands-on learner"],
 
   stats: [
-    { value: "81.50%", label: "Diploma aggregate" },
     { value: "7.18", label: "Sem 4 SGPA" },
+    { value: "81.50%", label: "Diploma aggregate" },
     { value: "4 wks", label: "Industrial training" },
-    { value: "3", label: "Languages" },
+    { value: "2", label: "Projects" },
   ],
 
   objective:
@@ -88,6 +88,7 @@ window.CV = {
     {
       name: "Automatic Street Light Controller",
       demo: "street",
+      filters: ["automation", "energy"],
       tags: ["LDR", "Energy saving", "Automation"],
       objective:
         "To automatically control street lights based on ambient light and avoid unnecessary power use.",
@@ -98,6 +99,7 @@ window.CV = {
     {
       name: "Home Automation Using AI",
       demo: "home",
+      filters: ["ai", "automation", "energy"],
       tags: ["AI", "Smart home", "Efficiency"],
       objective: "To explore an AI-integrated system for controlling and monitoring home appliances.",
       concept: "Appliances are controlled and monitored automatically, improving user convenience.",
@@ -153,9 +155,7 @@ window.CV = {
 
 // Default look of the site (the owner can change these on their own device via the Customise panel)
 window.SITE_DEFAULTS = {
-  theme: "light",
-  accent: "#ffd23f",
-  font: "grotesk",
+  accent: "#ff2a2a",
   motion: true,
   hidden: [],
 };
